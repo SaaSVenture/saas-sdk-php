@@ -1,4 +1,4 @@
-## Saas Webservice
+## Saas API SDK
 
 This package provides a common API set to interact with a Springboard instance via Springboard broker (PaaS).
 
