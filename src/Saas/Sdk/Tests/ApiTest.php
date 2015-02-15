@@ -38,7 +38,6 @@ class ApiTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testApi($transport)
 	{
-		$_SERVER['HTTP_HOST'] = 'foo.com';
 		return Api::factory('some-key', 's0m3s3cr3t', $transport);
 	}
 
