@@ -47,6 +47,7 @@ final class Api implements ApiInterface
 		$this->transport = $transport;
 
 		// Pick appropriate transport, if it wasn't provided
+		// @codeCoverageIgnoreStart
 		if (!$this->transport) {
 			if (strpos($_SERVER['HTTP_HOST'], TransportInterface::SAAS_API_ROOT) == false) {
 				$this->transport = new LocalTransport($credential);
@@ -54,6 +55,7 @@ final class Api implements ApiInterface
 				$this->transport = new RemoteTransport($credential);
 			}
 		}
+		// @codeCoverageIgnoreEnd
 	}
 
 	/**

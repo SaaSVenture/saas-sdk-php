@@ -20,11 +20,7 @@
             <directory suffix=".php">vendor</directory>
         </blacklist>
         <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">.</directory>
-            <exclude>
-                <directory suffix=".php">vendor</directory>
-                <directory suffix=".php">src/Saas/Sdk/Tests</directory>
-            </exclude>
+            <file>src/Saas/Sdk/Api.php</file>
         </whitelist>
     </filter>
 </phpunit>

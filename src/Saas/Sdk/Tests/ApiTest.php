@@ -7,15 +7,29 @@
  * @package saas/sdk
  */
 
-use \Mockery as M;
+use Mockery as M;
 use PHPUnit_Framework_TestCase;
+use Exception;
 use Saas\Sdk\Api;
 use Saas\Sdk\ResourceObject;
 
 class ApiTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * Transport Mock
+	 * Invalid Transport Mock
+	 *
+	 * @return Saas\Sdk\Contracts\TransportInterface
+	 */
+	public function testInvalidTransport()
+	{
+		$mock = M::mock('Saas\\Sdk\\Contracts\\TransportInterface');
+		$mock->shouldReceive('getOwnerApp')->once()->andThrow(new Exception('Just wrong!'));
+
+		return $mock;
+	}
+
+	/**
+	 * Valid Transport Mock
 	 *
 	 * @return Saas\Sdk\Contracts\TransportInterface
 	 */
@@ -28,6 +42,17 @@ class ApiTest extends PHPUnit_Framework_TestCase
 		)));
 
 		return $mock;
+	}
+
+	/**
+	 * Mock invalid API Instance
+	 *
+	 * @depends testInvalidTransport
+	 * @return Saas\Sdk\Contracts\ApiInterface
+	 */
+	public function testInvalidApi($transport)
+	{
+		return Api::factory('some-key', 's0m3s3cr3t', $transport);
 	}
 
 	/**
@@ -44,21 +69,32 @@ class ApiTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Original App Getter test
 	 *
+	 * @depends testInvalidApi
 	 * @depends testApi
 	 */
-	public function testGetOriginalAppUrl($api)
+	public function testGetOriginalAppUrl($invalidApi, $api)
 	{
+		// Valid API execution
 		$this->assertEquals('http://foo.com', $api->getOriginalAppUrl());
+
+		// Invalid API execution
+		$this->setExpectedException('Exception', 'Just wrong!');
+		$invalidApi->getOriginalAppUrl();
 	}
 
 	/**
 	 * Instance Auth URL Getter test
 	 *
+	 * @depends testInvalidApi
 	 * @depends testApi
 	 */
-	public function testGetLoginUrl($api)
+	public function testGetLoginUrl($invalidApi, $api)
 	{
 		$this->assertEquals('http://foo.saasapi.com/auth/login', $api->getLoginUrl());
+
+		// Invalid API execution
+		$this->setExpectedException('Exception', 'Just wrong!');
+		$invalidApi->getLoginUrl();
 	}
 
 }
