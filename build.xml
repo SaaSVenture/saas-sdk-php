@@ -1,0 +1,23 @@
+<project name="SaaSVenture API SDK" default="build" basedir=".">
+	<property name="output" location="${basedir}/build"/>
+	<property environment="env"/>
+
+	<target name="init">
+		<mkdir dir="${output}"/>
+		<exec executable="sh" failonerror="true">
+			<arg line="-c 'curl -s http://getcomposer.org/installer | php'"/>
+		</exec>
+	</target>
+
+	<target name="build" depends="init">
+		<exec executable="php" failonerror="true">
+			<arg line="composer.phar install"/>
+		</exec>
+		<exec executable="php" failonerror="true">
+			<arg line="vendor/bin/phpunit --coverage-text"/>
+		</exec>
+		<exec executable="sh" failonerror="true">
+			<arg line="-c 'rm composer.lock;rm vendor/* -R'"/>
+		</exec>
+	</target>
+</project>
