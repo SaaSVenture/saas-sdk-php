@@ -22,12 +22,12 @@ class ApiTest extends PHPUnit_Framework_TestCase
 	public function testTransport()
 	{
 		$mock = M::mock('Saas\\Sdk\\Contracts\\TransportInterface');
-        $mock->shouldReceive('getOwnerApp')->once()->andReturn(new ResourceObject(array(
-        	'url' => 'foo.com',
-        	'slug' => 'foo'
-        )));
+		$mock->shouldReceive('getOwnerApp')->once()->andReturn(new ResourceObject(array(
+			'url' => 'foo.com',
+			'slug' => 'foo'
+		)));
 
-        return $mock;
+		return $mock;
 	}
 
 	/**
