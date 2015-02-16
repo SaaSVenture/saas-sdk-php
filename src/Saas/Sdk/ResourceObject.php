@@ -7,7 +7,9 @@
  * @package saas/sdk
  */
 
-class ResourceObject
+use ArrayAccess;
+
+class ResourceObject implements ArrayAccess
 {
 	/**
 	 * @var array
@@ -24,6 +26,38 @@ class ResourceObject
 		if (!empty($resource)) {
 			$this->data = (array) $resource;
 		}
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function offsetExists($offset)
+	{
+		return isset($this->data[$offset]);
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function offsetGet($offset)
+	{
+		return $this->offsetExists($offset) ? $this->data[$offset] : null;
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function offsetSet($offset, $value)
+	{
+		$this->data[$offset] = $value;
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function offsetUnset($offset)
+	{
+		if ($this->offsetExists($offset)) unset($this->data[$offset]);
 	}
 
 	/**

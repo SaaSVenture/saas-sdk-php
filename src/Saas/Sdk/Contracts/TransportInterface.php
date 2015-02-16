@@ -23,4 +23,18 @@ interface TransportInterface
 	 * @return Saas\Sdk\ResourceObject
 	 */
 	public function getOwnerApp();
+
+	/**
+	 * Get user resource
+	 *
+	 * @return Saas\Sdk\ResourceObject
+	 */
+	public function getUser($id);
+
+	/**
+	 * Get company resource
+	 *
+	 * @return Saas\Sdk\ResourceObject
+	 */
+	public function getCompany($id);
 }

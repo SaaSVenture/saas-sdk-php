@@ -12,6 +12,8 @@ use Saas\Sdk\Contracts\TransportInterface;
 use Saas\Sdk\Transports\LocalTransport;
 use Saas\Sdk\Transports\RemoteTransport;
 use Saas\Sdk\Credential;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Exception, RuntimeException;
 
 final class Api implements ApiInterface
@@ -31,13 +33,22 @@ final class Api implements ApiInterface
 	private $transport;
 
 	/**
+	 * API session
+	 *
+	 * @var Symfony\Component\HttpFoundation\Session\SessionInterface
+	 */
+	private $session;
+
+	/**
 	 * Main API factory
 	 *
 	 * @param string API Key
 	 * @param string API Secret
+	 * @param Saas\Sdk\TransportInterface
+	 * @param Symfony\Component\HttpFoundation\Session\SessionInterface
 	 * @return Saas\Sdk\Contracts\ApiInterface
 	 */
-	final public static function factory($key, $secret, $transport = null)
+	final public static function factory($key, $secret, TransportInterface $transport = null, SessionInterface $session = null)
 	{
 		return new static($key, $secret, $transport);
 	}
@@ -47,8 +58,10 @@ final class Api implements ApiInterface
 	 *
 	 * @param string API Key
 	 * @param string API Secret
+	 * @param Saas\Sdk\TransportInterface
+	 * @param Symfony\Component\HttpFoundation\Session\SessionInterface
 	 */
-	public function __construct($key, $secret, TransportInterface $transport = null)
+	public function __construct($key, $secret, TransportInterface $transport = null, SessionInterface $session = null)
 	{
 		$this->credential = new Credential($key, $secret);
 		$this->transport = $transport;
@@ -61,6 +74,16 @@ final class Api implements ApiInterface
 			} else {
 				$this->transport = new RemoteTransport($this->credential);
 			}
+		}
+		// @codeCoverageIgnoreEnd
+
+		$this->session = $session;
+
+		// Pick appropriate session, if it wasn't provided
+		// @codeCoverageIgnoreStart
+		if (!$this->session) {
+			$this->session = new Session();
+			$this->session->isStarted() or $this->session->start();
 		}
 		// @codeCoverageIgnoreEnd
 	}
@@ -111,5 +134,58 @@ final class Api implements ApiInterface
 		return self::SAAS_API_HTTP_SCHEME
 				.TransportInterface::SAAS_API_ROOT
 				.'/exchange?'.http_build_query($payload);
+	}
+	
+	public function checkSession($onSuccessCallback = null)
+	{
+		if (isset($_GET[self::SAAS_API_HASH])) {
+			$hash = $_GET[self::SAAS_API_HASH];
+			if ($hash == md5($this->credential->getKey())) {
+				// Set current session
+				$this->session->set(self::SAAS_API_LOGIN, true);
+				$this->session->set(self::SAAS_API_USER, $_GET[self::SAAS_API_QS_USER]);
+				$this->session->set(self::SAAS_API_COMPANY, $_GET[self::SAAS_API_QS_COMPANY]);
+
+				if ($onSuccessCallback instanceof Closure) {
+					$onSuccessCallback();
+				} elseif (is_callable($onSuccessCallback)) {
+					call_user_func($onSuccessCallback);
+				} 
+			}
+		}
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function isLogin()
+	{
+		return $this->session->get(self::SAAS_API_LOGIN, false);
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function getActiveUser()
+	{
+		return $this->transport->getUser($this->session->get(self::SAAS_API_USER, 0));
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function getActiveCompany()
+	{
+		return $this->transport->getCompany($this->session->get(self::SAAS_API_COMPANY, 0));
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function logout()
+	{
+		$this->session->remove(self::SAAS_API_LOGIN);
+		$this->session->remove(self::SAAS_API_USER);
+		$this->session->remove(self::SAAS_API_COMPANY);
 	}
 }

@@ -10,6 +10,12 @@
 interface ApiInterface
 {
 	const SAAS_API_HTTP_SCHEME = 'http://';
+	const SAAS_API_HASH = 'saas_hash';
+	const SAAS_API_QS_USER = 'user_id';
+	const SAAS_API_QS_COMPANY = 'company_id';
+	const SAAS_API_LOGIN = 'saas_api_login';
+	const SAAS_API_USER = 'saas_api_user';
+	const SAAS_API_COMPANY = 'saas_api_company';
 
 	/**
 	 * Get the original app url
@@ -33,4 +39,39 @@ interface ApiInterface
 	 * @return string
 	 */
 	public function getExchangeUrl($userId = null, $companyId = null);
+
+	/**
+	 * Check session
+	 *
+	 * @return void
+	 */
+	public function checkSession($onSuccessCallback = null);
+
+	/**
+	 * Check whether current user are logged in
+	 *
+	 * @return bool
+	 */
+	public function isLogin();
+
+	/**
+	 * Get current active user
+	 *
+	 * @return Saas\Sdk\ResourceObject
+	 */
+	public function getActiveUser();
+
+	/**
+	 * Get current active company
+	 *
+	 * @return Saas\Sdk\ResourceObject
+	 */
+	public function getActiveCompany();
+
+	/**
+	 * Destroy current active session
+	 *
+	 * @return void
+	 */
+	public function logout();
 }

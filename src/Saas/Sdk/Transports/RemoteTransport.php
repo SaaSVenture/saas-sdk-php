@@ -61,6 +61,34 @@ class RemoteTransport implements TransportInterface
 	}
 
 	/**
+	 * @{inheritDoc}
+	 */
+	public function getUser($id)
+	{
+		try {
+			$response = $this->client->get('/api/user/'.$id, $this->defaultHeaders)->send();
+			$userData = $response->getBody();
+			return new ResourceObject(json_decode($userData,true));
+		} catch (Exception $e) {
+			return new ResourceObject();
+		}
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function getCompany($id)
+	{
+		try {
+			$response = $this->client->get('/api/company/'.$id, $this->defaultHeaders)->send();
+			$brandData = $response->getBody();
+			return new ResourceObject(json_decode($brandData,true));
+		} catch (Exception $e) {
+			return new ResourceObject();
+		}
+	}
+
+	/**
 	 * Get the base Saas API url
 	 *
 	 * @param mixed

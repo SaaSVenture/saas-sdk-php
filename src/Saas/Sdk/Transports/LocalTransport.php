@@ -44,6 +44,32 @@ class LocalTransport implements TransportInterface
 	}
 
 	/**
+	 * @{inheritDoc}
+	 */
+	public function getUser($id)
+	{
+		$user = $this->getApiDBGateway()
+					->table('users')
+					->where('id', $id)
+					->first();
+
+		return new ResourceObject($user);
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function getCompany($id)
+	{
+		$company = $this->getApiDBGateway()
+						->table('brands')
+						->where('id', $id)
+						->first();
+
+		return new ResourceObject($company);
+	}
+
+	/**
 	 * Get DB Gateway
 	 *
 	 * @return Laravel DB
