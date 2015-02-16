@@ -24,4 +24,13 @@ interface ApiInterface
 	 * @return string
 	 */
 	public function getLoginUrl();
+
+	/**
+	 * Get the exchange url
+	 *
+	 * @param  string
+	 * @param  string
+	 * @return string
+	 */
+	public function getExchangeUrl($userId = null, $companyId = null);
 }

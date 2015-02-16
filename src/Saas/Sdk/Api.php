@@ -17,6 +17,13 @@ use Exception, RuntimeException;
 final class Api implements ApiInterface
 {
 	/**
+	 * API credential
+	 *
+	 * @var Saas\Sdk\Credential
+	 */
+	private $credential;
+
+	/**
 	 * API  transport
 	 *
 	 * @var Saas\Sdk\Contracts\TransportInterface
@@ -43,16 +50,16 @@ final class Api implements ApiInterface
 	 */
 	public function __construct($key, $secret, TransportInterface $transport = null)
 	{
-		$credential = new Credential($key, $secret);
+		$this->credential = new Credential($key, $secret);
 		$this->transport = $transport;
 
 		// Pick appropriate transport, if it wasn't provided
 		// @codeCoverageIgnoreStart
 		if (!$this->transport) {
 			if (strpos($_SERVER['HTTP_HOST'], TransportInterface::SAAS_API_ROOT) !== false) {
-				$this->transport = new LocalTransport($credential);
+				$this->transport = new LocalTransport($this->credential);
 			} else {
-				$this->transport = new RemoteTransport($credential);
+				$this->transport = new RemoteTransport($this->credential);
 			}
 		}
 		// @codeCoverageIgnoreEnd
@@ -88,5 +95,21 @@ final class Api implements ApiInterface
 					.TransportInterface::SAAS_API_DOMAIN_SEPARATOR
 					.TransportInterface::SAAS_API_ROOT
 					.'/auth/login';
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function getExchangeUrl($userId = null, $companyId = null)
+	{
+		$payload = array('key' => $this->credential->getKey(), 'secret' => $this->credential->getSecret());
+		if (!empty($userId) && !empty($companyId)) {
+			$payload['user_id'] = $userId;
+			$payload['company_id'] = $companyId;
+		}
+
+		return self::SAAS_API_HTTP_SCHEME
+				.TransportInterface::SAAS_API_ROOT
+				.'/exchange?'.http_build_query($payload);
 	}
 }
