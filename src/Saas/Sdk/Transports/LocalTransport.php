@@ -12,7 +12,7 @@ use Saas\Sdk\Credential;
 use Saas\Sdk\ResourceObject;
 use RuntimeException;
 
-class LocalTransport implements TransportInterface
+class LocalTransport extends AbstractTransport implements TransportInterface
 {
 	/**
 	 * @var Saas\Sdk\Credential

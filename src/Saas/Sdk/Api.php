@@ -9,6 +9,7 @@
 
 use Saas\Sdk\Contracts\ApiInterface;
 use Saas\Sdk\Contracts\TransportInterface;
+use Saas\Sdk\Transports\AbstractTransport;
 use Saas\Sdk\Transports\LocalTransport;
 use Saas\Sdk\Transports\RemoteTransport;
 use Saas\Sdk\Credential;
@@ -69,7 +70,7 @@ final class Api implements ApiInterface
 		// Pick appropriate transport, if it wasn't provided
 		// @codeCoverageIgnoreStart
 		if (!$this->transport) {
-			if (strpos($_SERVER['HTTP_HOST'], TransportInterface::SAAS_API_ROOT) !== false) {
+			if (strpos($_SERVER['HTTP_HOST'], AbstractTransport::getApiRoot()) !== false) {
 				$this->transport = new LocalTransport($this->credential);
 			} else {
 				$this->transport = new RemoteTransport($this->credential);
@@ -116,7 +117,7 @@ final class Api implements ApiInterface
 		return self::SAAS_API_HTTP_SCHEME
 					.$app->slug
 					.TransportInterface::SAAS_API_DOMAIN_SEPARATOR
-					.TransportInterface::SAAS_API_ROOT
+					.AbstractTransport::getApiRoot()
 					.'/auth/login';
 	}
 
@@ -132,10 +133,10 @@ final class Api implements ApiInterface
 		}
 
 		return self::SAAS_API_HTTP_SCHEME
-				.TransportInterface::SAAS_API_ROOT
+				.AbstractTransport::getApiRoot()
 				.'/exchange?'.http_build_query($payload);
 	}
-	
+
 	public function checkSession($onSuccessCallback = null)
 	{
 		if (isset($_GET[self::SAAS_API_HASH])) {

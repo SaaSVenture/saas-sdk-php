@@ -13,7 +13,7 @@ use Saas\Sdk\ResourceObject;
 use Guzzle\Http\Client;
 use Exception;
 
-class RemoteTransport implements TransportInterface
+class RemoteTransport extends AbstractTransport implements TransportInterface
 {
 	/**
 	 * @var Saas\Sdk\Credential
@@ -96,7 +96,7 @@ class RemoteTransport implements TransportInterface
 	 */
 	protected function baseUrl($path = '')
 	{
-		return 'http://'.self::SAAS_API_ROOT.$path;
+		return 'http://'.self::getApiRoot().$path;
 	}
 
 	/**
