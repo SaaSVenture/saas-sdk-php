@@ -7,14 +7,28 @@
  * @package saas/sdk
  */
 
-use Mockery as M;
-use PHPUnit_Framework_TestCase;
-use Exception;
 use Saas\Sdk\Api;
 use Saas\Sdk\ResourceObject;
 
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+
+use Mockery as M;
+use PHPUnit_Framework_TestCase;
+use Exception;
+
 class ApiTest extends PHPUnit_Framework_TestCase
 {
+	/**
+	 * Session provider Mock
+	 *
+	 * @return Symfony\Component\HttpFoundation\Session\SessionInterface
+	 */
+	public function testSession()
+	{
+		return new Session(new MockArraySessionStorage());
+	}
+
 	/**
 	 * Invalid Transport Mock
 	 *
@@ -48,22 +62,24 @@ class ApiTest extends PHPUnit_Framework_TestCase
 	 * Mock invalid API Instance
 	 *
 	 * @depends testInvalidTransport
+	 * @depends testSession
 	 * @return Saas\Sdk\Contracts\ApiInterface
 	 */
-	public function testInvalidApi($transport)
+	public function testInvalidApi($transport, $session)
 	{
-		return Api::factory('some-key', 's0m3s3cr3t', $transport);
+		return Api::factory('some-key', 's0m3s3cr3t', $transport, $session);
 	}
 
 	/**
 	 * API Instance
 	 *
 	 * @depends testTransport
+	 * @depends testSession
 	 * @return Saas\Sdk\Contracts\ApiInterface
 	 */
-	public function testApi($transport)
+	public function testApi($transport, $session)
 	{
-		return Api::factory('some-key', 's0m3s3cr3t', $transport);
+		return Api::factory('some-key', 's0m3s3cr3t', $transport, $session);
 	}
 
 	/**

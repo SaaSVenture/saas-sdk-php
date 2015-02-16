@@ -51,7 +51,7 @@ final class Api implements ApiInterface
 	 */
 	final public static function factory($key, $secret, TransportInterface $transport = null, SessionInterface $session = null)
 	{
-		return new static($key, $secret, $transport);
+		return new static($key, $secret, $transport, $session);
 	}
 
 	/**
