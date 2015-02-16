@@ -96,7 +96,7 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 	 */
 	protected function baseUrl($path = '')
 	{
-		return 'http://'.self::getApiRoot().$path;
+		return 'http://'.static::getApiRoot().$path;
 	}
 
 	/**

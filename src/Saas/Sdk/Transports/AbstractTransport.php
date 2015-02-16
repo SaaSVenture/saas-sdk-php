@@ -18,10 +18,10 @@ abstract class AbstractTransport
 	 */
 	public static function getApiRoot()
 	{
-		if (!defined('SAAS_API_DEFAULT_ROOT')) {
-			return TransportInterface::SAAS_API_DEFAULT_ROOT;
-		}
+		$root = !defined('SAAS_API_DEFAULT_ROOT') 
+			? TransportInterface::SAAS_API_DEFAULT_ROOT
+			: SAAS_API_DEFAULT_ROOT;
 
-		return SAAS_API_DEFAULT_ROOT;
+		return rtrim($root,'/');
 	}
 }
