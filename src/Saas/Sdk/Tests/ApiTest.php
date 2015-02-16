@@ -7,6 +7,7 @@
  * @package saas/sdk
  */
 
+use Saas\Sdk\Contracts\ApiInterface;
 use Saas\Sdk\Api;
 use Saas\Sdk\ResourceObject;
 
@@ -54,6 +55,13 @@ class ApiTest extends PHPUnit_Framework_TestCase
 			'url' => 'foo.com',
 			'slug' => 'foo'
 		)));
+		$mock->shouldReceive('getUser')->once()->andReturn(new ResourceObject(array(
+			'name' => 'Mr. Foo',
+			'email' => 'foo@foo.com'
+		)));
+		$mock->shouldReceive('getCompany')->once()->andReturn(new ResourceObject(array(
+			'title' => 'FooCorp',
+		)));
 
 		return $mock;
 	}
@@ -80,6 +88,16 @@ class ApiTest extends PHPUnit_Framework_TestCase
 	public function testApi($transport, $session)
 	{
 		return Api::factory('some-key', 's0m3s3cr3t', $transport, $session);
+	}
+
+	/**
+	 * API Callback mock
+	 *
+	 * @void string
+	 */
+	public function uselessCallback()
+	{
+		echo 'yay!';
 	}
 
 	/**
@@ -113,4 +131,88 @@ class ApiTest extends PHPUnit_Framework_TestCase
 		$invalidApi->getLoginUrl();
 	}
 
+	/**
+	 * Instance Exchange URL Getter test
+	 *
+	 * @depends testApi
+	 */
+	public function testGetExchangeUrl($api)
+	{
+		$expectedExchangeUrl = 'http://saasapi.com/exchange?key=some-key&secret=s0m3s3cr3t&user_id=1&company_id=2';
+		$this->assertEquals($expectedExchangeUrl, $api->getExchangeUrl(1,2));
+	}
+
+	/**
+	 * Instance checkSession test
+	 *
+	 * @depends testApi
+	 */
+	public function testCheckSession($api)
+	{
+		// Emulate accepting hash
+		$_GET[ApiInterface::SAAS_API_HASH] = md5('some-key');
+		$_GET[ApiInterface::SAAS_API_QS_USER] = '1';
+		$_GET[ApiInterface::SAAS_API_QS_COMPANY] = '2';
+
+		$callableOne = array($this, 'uselessCallback');
+		$callableTwo = function() {
+			echo 'Look ma!';
+		};
+
+		ob_start();
+		$api->checkSession($callableOne);
+		$callbackContentOne = ob_get_clean();
+		$this->assertEquals('yay!', $callbackContentOne);
+
+		ob_start();
+		$api->checkSession($callableTwo);
+		$callbackContentTwo = ob_get_clean();
+		$this->assertEquals('Look ma!', $callbackContentTwo);
+	}
+
+	/**
+	 * Login checker and Logout test
+	 *
+	 * @depends testApi
+	 */
+	public function testIsLoginLogout($api)
+	{
+		$api->logout();
+		$this->assertFalse($api->isLogin());
+
+		// Emulate accepting hash
+		$_GET[ApiInterface::SAAS_API_HASH] = md5('some-key');
+		$_GET[ApiInterface::SAAS_API_QS_USER] = '1';
+		$_GET[ApiInterface::SAAS_API_QS_COMPANY] = '2';
+		$api->checkSession();
+
+		$this->assertTrue($api->isLogin());
+	}
+
+	/**
+	 * Get User Resource test
+	 *
+	 * @depends testApi
+	 */
+	public function testGetUser($api)
+	{
+		$user = $api->getActiveUser();
+
+		$this->assertInstanceOf('Saas\Sdk\ResourceObject', $user);
+		$this->assertEquals('Mr. Foo', $user['name']);
+		$this->assertEquals('foo@foo.com', $user['email']);
+	}
+
+	/**
+	 * Get Company Resource test
+	 *
+	 * @depends testApi
+	 */
+	public function testGetCompany($api)
+	{
+		$company = $api->getActiveCompany();
+
+		$this->assertInstanceOf('Saas\Sdk\ResourceObject', $company);
+		$this->assertEquals('FooCorp', $company['title']);
+	}
 }

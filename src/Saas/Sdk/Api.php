@@ -64,9 +64,11 @@ final class Api implements ApiInterface
 	 */
 	public function __construct($key, $secret, TransportInterface $transport = null, SessionInterface $session = null)
 	{
+		// Set credential
 		$this->credential = new Credential($key, $secret);
-		$this->transport = $transport;
 
+		// Set transport
+		$this->transport = $transport;
 		// Pick appropriate transport, if it wasn't provided
 		// @codeCoverageIgnoreStart
 		if (!$this->transport) {
@@ -78,8 +80,8 @@ final class Api implements ApiInterface
 		}
 		// @codeCoverageIgnoreEnd
 
+		// Set session
 		$this->session = $session;
-
 		// Pick appropriate session, if it wasn't provided
 		// @codeCoverageIgnoreStart
 		if (!$this->session) {
@@ -147,9 +149,7 @@ final class Api implements ApiInterface
 				$this->session->set(self::SAAS_API_USER, $_GET[self::SAAS_API_QS_USER]);
 				$this->session->set(self::SAAS_API_COMPANY, $_GET[self::SAAS_API_QS_COMPANY]);
 
-				if ($onSuccessCallback instanceof Closure) {
-					$onSuccessCallback();
-				} elseif (is_callable($onSuccessCallback)) {
+				if (is_callable($onSuccessCallback)) {
 					call_user_func($onSuccessCallback);
 				} 
 			}
