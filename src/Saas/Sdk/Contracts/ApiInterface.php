@@ -68,6 +68,23 @@ interface ApiInterface
 	 */
 	public function getActiveCompany();
 
+
+	/**
+	 * Get user by id
+	 *
+	 * @param int
+	 * @return Saas\Sdk\ResourceObject
+	 */
+	public function getUser($id = 0);
+
+	/**
+	 * Get company by id
+	 *
+	 * @param int
+	 * @return Saas\Sdk\ResourceObject
+	 */
+	public function getCompany($id = 0);
+
 	/**
 	 * Destroy current active session
 	 *

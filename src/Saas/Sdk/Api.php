@@ -169,7 +169,7 @@ final class Api implements ApiInterface
 	 */
 	public function getActiveUser()
 	{
-		return $this->transport->getUser($this->session->get(self::SAAS_API_USER, 0));
+		return $this->getUser($this->session->get(self::SAAS_API_USER, 0));
 	}
 
 	/**
@@ -177,7 +177,23 @@ final class Api implements ApiInterface
 	 */
 	public function getActiveCompany()
 	{
-		return $this->transport->getCompany($this->session->get(self::SAAS_API_COMPANY, 0));
+		return $this->getCompany($this->session->get(self::SAAS_API_COMPANY, 0));
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function getUser($id = 0)
+	{
+		return $this->transport->getUser($id);
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function getCompany($id = 0)
+	{
+		return $this->transport->getCompany($id);
 	}
 
 	/**
