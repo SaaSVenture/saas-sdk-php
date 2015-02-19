@@ -45,4 +45,11 @@ interface TransportInterface
 	 * @return void
 	 */
 	public function clearSession($sessionId);
+
+	/**
+	 * Get available plans
+	 *
+	 * @return Saas\Sdk\ResourceCollection
+	 */
+	public function getPlans();
 }

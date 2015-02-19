@@ -78,6 +78,14 @@ class LocalTransport extends AbstractTransport implements TransportInterface
 	}
 
 	/**
+	 * @{inheritDoc}
+	 */
+	public function getPlans()
+	{
+		throw new Exception('Not implemented');
+	}
+
+	/**
 	 * Get DB Gateway
 	 *
 	 * @return Laravel DB

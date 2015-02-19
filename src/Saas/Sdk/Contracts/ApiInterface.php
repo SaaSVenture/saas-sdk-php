@@ -93,4 +93,11 @@ interface ApiInterface
 	 * @return void
 	 */
 	public function logout();
+
+	/**
+	 * Get available plans
+	 *
+	 * @return Saas\Sdk\ResourceCollection
+	 */
+	public function getPlans();
 }

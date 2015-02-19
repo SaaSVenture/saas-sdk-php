@@ -10,6 +10,7 @@
 use Saas\Sdk\Contracts\ApiInterface;
 use Saas\Sdk\Api;
 use Saas\Sdk\ResourceObject;
+use Saas\Sdk\ResourceCollection;
 
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
@@ -61,6 +62,12 @@ class ApiTest extends PHPUnit_Framework_TestCase
 		)));
 		$mock->shouldReceive('getCompany')->once()->andReturn(new ResourceObject(array(
 			'title' => 'FooCorp',
+		)));
+		$mock->shouldReceive('clearSession')->once();
+		$mock->shouldReceive('getPlans')->once()->andReturn(new ResourceCollection(array(
+			array('name' => 'Free', 'price' => '0'),
+			array('name' => 'Startup', 'price' => '100'),
+			array('name' => 'Enterprise', 'price' => '500'),
 		)));
 
 		return $mock;
@@ -216,5 +223,34 @@ class ApiTest extends PHPUnit_Framework_TestCase
 
 		$this->assertInstanceOf('Saas\Sdk\ResourceObject', $company);
 		$this->assertEquals('FooCorp', $company['title']);
+	}
+
+	/**
+	 * Get plans
+	 *
+	 * @depends testApi
+	 */
+	public function testGetPlans($api)
+	{
+		$plans = $api->getPlans();
+
+		$this->assertInstanceOf('Saas\Sdk\ResourceCollection', $plans);
+
+		foreach ($plans as $i => $plan) {
+			switch ($i) {
+				case 0:
+					$this->assertEquals('Free',$plan['name']);
+					$this->assertEquals(0,$plan['price']);
+					break;
+				case 1:
+					$this->assertEquals('Startup',$plan['name']);
+					$this->assertEquals(100,$plan['price']);
+					break;
+				case 3:
+					$this->assertEquals('Enterprise',$plan['name']);
+					$this->assertEquals(500,$plan['price']);
+					break;
+			}
+		}
 	}
 }

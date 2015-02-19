@@ -216,4 +216,12 @@ final class Api implements ApiInterface
 
 		$this->transport->clearSession($sessionId);
 	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function getPlans()
+	{
+		return $this->transport->getPlans();
+	}
 }

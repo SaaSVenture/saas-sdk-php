@@ -10,6 +10,7 @@
 use Saas\Sdk\Contracts\TransportInterface;
 use Saas\Sdk\Credential;
 use Saas\Sdk\ResourceObject;
+use Saas\Sdk\ResourceCollection;
 use Guzzle\Http\Client;
 use Exception;
 
@@ -97,6 +98,20 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 			$this->client->get('/api/clearsession/'.$sessionId, $this->defaultHeaders)->send();
 		} catch (Exception $e) {
 			// Supress any error
+		}
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function getPlans()
+	{
+		try {
+			$response = $this->client->get('/api/plans', $this->defaultHeaders)->send();
+			$plansData = $response->getBody();
+			return new ResourceCollection(json_decode($plansData,true));
+		} catch (Exception $e) {
+			return new ResourceCollection();
 		}
 	}
 
