@@ -126,13 +126,19 @@ final class Api implements ApiInterface
 	/**
 	 * @{inheritDoc}
 	 */
-	public function getExchangeUrl($userId = null, $companyId = null)
+	public function getExchangeUrl($userId = null, $companyId = null, $sessionId = null)
 	{
+		// Main payload, API key and secret
 		$payload = array('key' => $this->credential->getKey(), 'secret' => $this->credential->getSecret());
+
+		// User id and Company id (active)
 		if (!empty($userId) && !empty($companyId)) {
 			$payload['user_id'] = $userId;
 			$payload['company_id'] = $companyId;
 		}
+
+		// Session id
+		if (!empty($sessionId)) $payload['session_id'] = $sessionId;
 
 		return self::SAAS_API_HTTP_SCHEME
 				.AbstractTransport::getApiRoot()

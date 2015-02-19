@@ -38,7 +38,7 @@ interface ApiInterface
 	 * @param  string
 	 * @return string
 	 */
-	public function getExchangeUrl($userId = null, $companyId = null);
+	public function getExchangeUrl($userId = null, $companyId = null, $sessionId = null);
 
 	/**
 	 * Check session
