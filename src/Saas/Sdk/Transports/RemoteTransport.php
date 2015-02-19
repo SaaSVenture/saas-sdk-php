@@ -89,6 +89,21 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 	}
 
 	/**
+	 * @{inheritDoc}
+	 */
+	public function clearSession($sessionId)
+	{
+		try {
+			$response = $this->client->get('/api/clearsession/'.$sessionId, $this->defaultHeaders)->send();
+			die($response->getBody());
+		} catch (Exception $e) {
+			// Supress any error
+			var_dump($e);
+			die;
+		}
+	}
+
+	/**
 	 * Get the base Saas API url
 	 *
 	 * @param mixed

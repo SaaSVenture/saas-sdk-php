@@ -37,4 +37,12 @@ interface TransportInterface
 	 * @return Saas\Sdk\ResourceObject
 	 */
 	public function getCompany($id);
+
+	/**
+	 * Clear specific session id
+	 *
+	 * @param string Session ID
+	 * @return void
+	 */
+	public function clearSession($sessionId);
 }

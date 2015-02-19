@@ -208,8 +208,12 @@ final class Api implements ApiInterface
 	 */
 	public function logout()
 	{
+		$sessionId = $this->session->get(self::SAAS_API_SESSION);
 		$this->session->remove(self::SAAS_API_LOGIN);
+		$this->session->remove(self::SAAS_API_SESSION);
 		$this->session->remove(self::SAAS_API_USER);
 		$this->session->remove(self::SAAS_API_COMPANY);
+
+		$this->transport->clearSession($sessionId);
 	}
 }

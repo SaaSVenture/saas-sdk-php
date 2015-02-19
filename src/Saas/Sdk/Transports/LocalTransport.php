@@ -70,6 +70,14 @@ class LocalTransport extends AbstractTransport implements TransportInterface
 	}
 
 	/**
+	 * @{inheritDoc}
+	 */
+	public function clearSession($sessionId)
+	{
+		throw new Exception('Not implemented');
+	}
+
+	/**
 	 * Get DB Gateway
 	 *
 	 * @return Laravel DB
