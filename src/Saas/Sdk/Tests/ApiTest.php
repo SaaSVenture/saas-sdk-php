@@ -138,8 +138,8 @@ class ApiTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testGetExchangeUrl($api)
 	{
-		$expectedExchangeUrl = 'http://saasapi.com/exchange?key=some-key&secret=s0m3s3cr3t&user_id=1&company_id=2';
-		$this->assertEquals($expectedExchangeUrl, $api->getExchangeUrl(1,2));
+		$expectedExchangeUrl = 'http://saasapi.com/exchange?key=some-key&secret=s0m3s3cr3t&user_id=1&company_id=2&session_id=3';
+		$this->assertEquals($expectedExchangeUrl, $api->getExchangeUrl(1,2,3));
 	}
 
 	/**
@@ -153,6 +153,7 @@ class ApiTest extends PHPUnit_Framework_TestCase
 		$_GET[ApiInterface::SAAS_API_HASH] = md5('some-key');
 		$_GET[ApiInterface::SAAS_API_QS_USER] = '1';
 		$_GET[ApiInterface::SAAS_API_QS_COMPANY] = '2';
+		$_GET[ApiInterface::SAAS_API_QS_SESSION] = '3';
 
 		$callableOne = array($this, 'uselessCallback');
 		$callableTwo = function() {
@@ -184,6 +185,7 @@ class ApiTest extends PHPUnit_Framework_TestCase
 		$_GET[ApiInterface::SAAS_API_HASH] = md5('some-key');
 		$_GET[ApiInterface::SAAS_API_QS_USER] = '1';
 		$_GET[ApiInterface::SAAS_API_QS_COMPANY] = '2';
+		$_GET[ApiInterface::SAAS_API_QS_SESSION] = '3';
 		$api->checkSession();
 
 		$this->assertTrue($api->isLogin());

@@ -11,9 +11,11 @@ interface ApiInterface
 {
 	const SAAS_API_HTTP_SCHEME = 'http://';
 	const SAAS_API_HASH = 'saas_hash';
+	const SAAS_API_QS_SESSION = 'session_id';
 	const SAAS_API_QS_USER = 'user_id';
 	const SAAS_API_QS_COMPANY = 'company_id';
 	const SAAS_API_LOGIN = 'saas_api_login';
+	const SAAS_API_SESSION = 'saas_api_session';
 	const SAAS_API_USER = 'saas_api_user';
 	const SAAS_API_COMPANY = 'saas_api_company';
 

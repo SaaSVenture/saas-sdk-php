@@ -152,6 +152,7 @@ final class Api implements ApiInterface
 			if ($hash == md5($this->credential->getKey())) {
 				// Set current session
 				$this->session->set(self::SAAS_API_LOGIN, true);
+				$this->session->set(self::SAAS_API_SESSION, $_GET[self::SAAS_API_QS_SESSION]);
 				$this->session->set(self::SAAS_API_USER, $_GET[self::SAAS_API_QS_USER]);
 				$this->session->set(self::SAAS_API_COMPANY, $_GET[self::SAAS_API_QS_COMPANY]);
 
