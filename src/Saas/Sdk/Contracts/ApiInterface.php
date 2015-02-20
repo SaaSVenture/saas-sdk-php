@@ -100,4 +100,13 @@ interface ApiInterface
 	 * @return Saas\Sdk\ResourceCollection
 	 */
 	public function getPlans();
+
+
+	/**
+	 * Get purchase url
+	 *
+	 * @param string Plan title
+	 * @return string url
+	 */
+	public function getPurchaseUrl($plan);
 }

@@ -253,4 +253,20 @@ class ApiTest extends PHPUnit_Framework_TestCase
 			}
 		}
 	}
+
+	/**
+	 * Get purchase url
+	 *
+	 * @depends testApi
+	 * @depends testInvalidApi
+	 */
+	public function testGetPurchaseUrl($api, $invalidApi)
+	{
+		$this->assertEquals('http://foo.saasapi.com/start/Small', $api->getPurchaseUrl('Small'));
+		$this->assertEquals('http://foo.saasapi.com/start/Medium', $api->getPurchaseUrl('Medium'));
+		$this->assertEquals('http://foo.saasapi.com/start/Large', $api->getPurchaseUrl('Large'));
+
+		$this->setExpectedException('Exception');
+		$invalidApi->getPurchaseUrl('Random');
+	}
 }

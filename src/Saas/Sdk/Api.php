@@ -224,4 +224,23 @@ final class Api implements ApiInterface
 	{
 		return $this->transport->getPlans();
 	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function getPurchaseUrl($plan)
+	{
+		try {
+			$app = $this->transport->getOwnerApp();
+		} catch (Exception $e) {
+			throw new RuntimeException($e->getMessage());
+		}
+
+		return self::SAAS_API_HTTP_SCHEME
+					.$app->slug
+					.TransportInterface::SAAS_API_DOMAIN_SEPARATOR
+					.AbstractTransport::getApiRoot()
+					.'/start/'
+					.$plan;
+	}
 }
