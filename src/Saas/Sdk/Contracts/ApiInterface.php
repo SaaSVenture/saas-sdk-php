@@ -70,6 +70,12 @@ interface ApiInterface
 	 */
 	public function getActiveCompany();
 
+	/**
+	 * Get current active subscription
+	 *
+	 * @return Saas\Sdk\ResourceObject
+	 */
+	public function getActiveSubscription();
 
 	/**
 	 * Get user by id

@@ -39,6 +39,13 @@ interface TransportInterface
 	public function getCompany($id);
 
 	/**
+	 * Get current company subscription
+	 *
+	 * @return Saas\Sdk\ResourceObject
+	 */
+	public function getCurrentSubscription($companyId);
+
+	/**
 	 * Clear specific session id
 	 *
 	 * @param string Session ID

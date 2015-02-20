@@ -72,6 +72,21 @@ class LocalTransport extends AbstractTransport implements TransportInterface
 	/**
 	 * @{inheritDoc}
 	 */
+	public function getCurrentSubscription($companyId)
+	{
+		$subscription = $this->getApiDBGateway()
+							->table('subscriptions')
+							->where('brand_id', $companyId)
+							->whereIn('status', array('active','suspended','pending','expired'))
+							->orderBy('status', 'asc')
+							->first();
+
+		return new ResourceObject($subscription);
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
 	public function clearSession($sessionId)
 	{
 		throw new Exception('Not implemented');
