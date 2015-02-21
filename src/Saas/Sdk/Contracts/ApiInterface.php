@@ -43,6 +43,28 @@ interface ApiInterface
 	public function getExchangeUrl($userId = null, $companyId = null, $sessionId = null);
 
 	/**
+	 * Get the profile url for current active user
+	 *
+	 * @return string 
+	 */
+	public function getProfileUrl();
+
+	/**
+	 * Get the wallet url for current active user
+	 *
+	 * @return string
+	 */
+	public function getWalletUrl();
+
+	/**
+	 * Get purchase url
+	 *
+	 * @param string Plan title
+	 * @return string url
+	 */
+	public function getPurchaseUrl($plan);
+
+	/**
 	 * Check session
 	 *
 	 * @return void
@@ -106,13 +128,4 @@ interface ApiInterface
 	 * @return Saas\Sdk\ResourceCollection
 	 */
 	public function getPlans();
-
-
-	/**
-	 * Get purchase url
-	 *
-	 * @param string Plan title
-	 * @return string url
-	 */
-	public function getPurchaseUrl($plan);
 }

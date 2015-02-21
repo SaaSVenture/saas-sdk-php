@@ -154,6 +154,50 @@ class ApiTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Get profile edit
+	 *
+	 * @depends testApi
+	 * @depends testInvalidApi
+	 */
+	public function testGetProfileUrl($api, $invalidApi)
+	{
+		$this->assertEquals('http://foo.saasapi.com/user/profile/edit', $api->getProfileUrl());
+
+		$this->setExpectedException('Exception');
+		$invalidApi->getProfileUrl();
+	}
+
+	/**
+	 * Get wallet
+	 *
+	 * @depends testApi
+	 * @depends testInvalidApi
+	 */
+	public function testGetWalletUrl($api, $invalidApi)
+	{
+		$this->assertEquals('http://foo.saasapi.com/user/wallet', $api->getWalletUrl());
+
+		$this->setExpectedException('Exception');
+		$invalidApi->getWalletUrl();
+	}
+
+	/**
+	 * Get purchase url
+	 *
+	 * @depends testApi
+	 * @depends testInvalidApi
+	 */
+	public function testGetPurchaseUrl($api, $invalidApi)
+	{
+		$this->assertEquals('http://foo.saasapi.com/start/Small', $api->getPurchaseUrl('Small'));
+		$this->assertEquals('http://foo.saasapi.com/start/Medium', $api->getPurchaseUrl('Medium'));
+		$this->assertEquals('http://foo.saasapi.com/start/Large', $api->getPurchaseUrl('Large'));
+
+		$this->setExpectedException('Exception');
+		$invalidApi->getPurchaseUrl('Random');
+	}
+
+	/**
 	 * Instance checkSession test
 	 *
 	 * @depends testApi
@@ -270,21 +314,5 @@ class ApiTest extends PHPUnit_Framework_TestCase
 					break;
 			}
 		}
-	}
-
-	/**
-	 * Get purchase url
-	 *
-	 * @depends testApi
-	 * @depends testInvalidApi
-	 */
-	public function testGetPurchaseUrl($api, $invalidApi)
-	{
-		$this->assertEquals('http://foo.saasapi.com/start/Small', $api->getPurchaseUrl('Small'));
-		$this->assertEquals('http://foo.saasapi.com/start/Medium', $api->getPurchaseUrl('Medium'));
-		$this->assertEquals('http://foo.saasapi.com/start/Large', $api->getPurchaseUrl('Large'));
-
-		$this->setExpectedException('Exception');
-		$invalidApi->getPurchaseUrl('Random');
 	}
 }

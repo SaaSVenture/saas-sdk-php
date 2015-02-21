@@ -126,6 +126,42 @@ final class Api implements ApiInterface
 	/**
 	 * @{inheritDoc}
 	 */
+	public function getProfileUrl()
+	{
+		try {
+			$app = $this->transport->getOwnerApp();
+		} catch (Exception $e) {
+			throw new RuntimeException($e->getMessage());
+		}	
+
+		return self::SAAS_API_HTTP_SCHEME
+					.$app->slug
+					.TransportInterface::SAAS_API_DOMAIN_SEPARATOR
+					.AbstractTransport::getApiRoot()
+					.'/user/profile/edit';
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function getWalletUrl()
+	{
+		try {
+			$app = $this->transport->getOwnerApp();
+		} catch (Exception $e) {
+			throw new RuntimeException($e->getMessage());
+		}
+
+		return self::SAAS_API_HTTP_SCHEME
+					.$app->slug
+					.TransportInterface::SAAS_API_DOMAIN_SEPARATOR
+					.AbstractTransport::getApiRoot()
+					.'/user/wallet';
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
 	public function getExchangeUrl($userId = null, $companyId = null, $sessionId = null)
 	{
 		// Main payload, API key and secret
@@ -143,6 +179,25 @@ final class Api implements ApiInterface
 		return self::SAAS_API_HTTP_SCHEME
 				.AbstractTransport::getApiRoot()
 				.'/exchange?'.http_build_query($payload);
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function getPurchaseUrl($plan)
+	{
+		try {
+			$app = $this->transport->getOwnerApp();
+		} catch (Exception $e) {
+			throw new RuntimeException($e->getMessage());
+		}
+
+		return self::SAAS_API_HTTP_SCHEME
+					.$app->slug
+					.TransportInterface::SAAS_API_DOMAIN_SEPARATOR
+					.AbstractTransport::getApiRoot()
+					.'/start/'
+					.$plan;
 	}
 
 	public function checkSession($onSuccessCallback = null)
@@ -231,24 +286,5 @@ final class Api implements ApiInterface
 	public function getPlans()
 	{
 		return $this->transport->getPlans();
-	}
-
-	/**
-	 * @{inheritDoc}
-	 */
-	public function getPurchaseUrl($plan)
-	{
-		try {
-			$app = $this->transport->getOwnerApp();
-		} catch (Exception $e) {
-			throw new RuntimeException($e->getMessage());
-		}
-
-		return self::SAAS_API_HTTP_SCHEME
-					.$app->slug
-					.TransportInterface::SAAS_API_DOMAIN_SEPARATOR
-					.AbstractTransport::getApiRoot()
-					.'/start/'
-					.$plan;
 	}
 }
