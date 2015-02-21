@@ -63,6 +63,10 @@ class ApiTest extends PHPUnit_Framework_TestCase
 		$mock->shouldReceive('getCompany')->once()->andReturn(new ResourceObject(array(
 			'title' => 'FooCorp',
 		)));
+		$mock->shouldReceive('getCurrentSubscription')->once()->andReturn(new ResourceObject(array(
+			'title' => 'Startup',
+			'status' => 'active',
+		)));
 		$mock->shouldReceive('clearSession')->once();
 		$mock->shouldReceive('getPlans')->once()->andReturn(new ResourceCollection(array(
 			array('name' => 'Free', 'price' => '0'),
@@ -223,6 +227,20 @@ class ApiTest extends PHPUnit_Framework_TestCase
 
 		$this->assertInstanceOf('Saas\Sdk\ResourceObject', $company);
 		$this->assertEquals('FooCorp', $company['title']);
+	}
+
+	/**
+	 * Get active subscription test
+	 *
+	 * @depends testApi
+	 */
+	public function testGetActiveSubscription($api)
+	{
+		$subscription = $api->getActiveSubscription();
+
+		$this->assertInstanceOf('Saas\Sdk\ResourceObject', $subscription);
+		$this->assertEquals('active', $subscription['status']);
+		$this->assertEquals('Startup', $subscription['title']);
 	}
 
 	/**
