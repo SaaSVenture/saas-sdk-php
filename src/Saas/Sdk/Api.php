@@ -132,6 +132,14 @@ final class Api implements ApiInterface
 	/**
 	 * @{inheritDoc}
 	 */
+	public function getSubscriptionUrl()
+	{
+		return $this->getAppUrl('/brand/subscription');
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
 	public function getExchangeUrl($userId = null, $companyId = null, $sessionId = null)
 	{
 		// Main payload, API key and secret

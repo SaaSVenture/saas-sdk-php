@@ -57,6 +57,13 @@ interface ApiInterface
 	public function getWalletUrl();
 
 	/**
+	 * Get the subscription url for current active brand
+	 *
+	 * @return string
+	 */
+	public function getSubscriptionUrl();
+
+	/**
 	 * Get purchase url
 	 *
 	 * @param string Plan title

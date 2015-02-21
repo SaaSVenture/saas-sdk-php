@@ -182,6 +182,20 @@ class ApiTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Get subscription url
+	 *
+	 * @depends testApi
+	 * @depends testInvalidApi
+	 */
+	public function testGetSubscriptionUrl($api, $invalidApi)
+	{
+		$this->assertEquals('http://foo.saasapi.com/brand/subscription', $api->getSubscriptionUrl());
+
+		$this->setExpectedException('Exception');
+		$invalidApi->getSubscriptionUrl();
+	}
+
+	/**
 	 * Get purchase url
 	 *
 	 * @depends testApi
