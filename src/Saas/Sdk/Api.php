@@ -110,17 +110,7 @@ final class Api implements ApiInterface
 	 */
 	public function getLoginUrl()
 	{
-		try {
-			$app = $this->transport->getOwnerApp();
-		} catch (Exception $e) {
-			throw new RuntimeException($e->getMessage());
-		}
-
-		return self::SAAS_API_HTTP_SCHEME
-					.$app->slug
-					.TransportInterface::SAAS_API_DOMAIN_SEPARATOR
-					.AbstractTransport::getApiRoot()
-					.'/auth/login';
+		return $this->getAppUrl('/auth/login');
 	}
 
 	/**
@@ -128,17 +118,7 @@ final class Api implements ApiInterface
 	 */
 	public function getProfileUrl()
 	{
-		try {
-			$app = $this->transport->getOwnerApp();
-		} catch (Exception $e) {
-			throw new RuntimeException($e->getMessage());
-		}	
-
-		return self::SAAS_API_HTTP_SCHEME
-					.$app->slug
-					.TransportInterface::SAAS_API_DOMAIN_SEPARATOR
-					.AbstractTransport::getApiRoot()
-					.'/user/profile/edit';
+		return $this->getAppUrl('/user/profile/edit');
 	}
 
 	/**
@@ -146,17 +126,7 @@ final class Api implements ApiInterface
 	 */
 	public function getWalletUrl()
 	{
-		try {
-			$app = $this->transport->getOwnerApp();
-		} catch (Exception $e) {
-			throw new RuntimeException($e->getMessage());
-		}
-
-		return self::SAAS_API_HTTP_SCHEME
-					.$app->slug
-					.TransportInterface::SAAS_API_DOMAIN_SEPARATOR
-					.AbstractTransport::getApiRoot()
-					.'/user/wallet';
+		return $this->getAppUrl('/user/wallet');
 	}
 
 	/**
@@ -186,18 +156,7 @@ final class Api implements ApiInterface
 	 */
 	public function getPurchaseUrl($plan)
 	{
-		try {
-			$app = $this->transport->getOwnerApp();
-		} catch (Exception $e) {
-			throw new RuntimeException($e->getMessage());
-		}
-
-		return self::SAAS_API_HTTP_SCHEME
-					.$app->slug
-					.TransportInterface::SAAS_API_DOMAIN_SEPARATOR
-					.AbstractTransport::getApiRoot()
-					.'/start/'
-					.$plan;
+		return $this->getAppUrl('/start/'.$plan);
 	}
 
 	public function checkSession($onSuccessCallback = null)
@@ -286,5 +245,26 @@ final class Api implements ApiInterface
 	public function getPlans()
 	{
 		return $this->transport->getPlans();
+	}
+
+	/**
+	 * Common App URL Generator
+	 *
+	 * @param string Path
+	 * @return string Full URI
+	 */
+	protected function getAppUrl($path)
+	{
+		try {
+			$app = $this->transport->getOwnerApp();
+		} catch (Exception $e) {
+			throw new RuntimeException($e->getMessage());
+		}
+
+		return self::SAAS_API_HTTP_SCHEME
+					.$app->slug
+					.TransportInterface::SAAS_API_DOMAIN_SEPARATOR
+					.AbstractTransport::getApiRoot()
+					.$path;
 	}
 }
