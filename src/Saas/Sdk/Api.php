@@ -255,7 +255,7 @@ final class Api implements ApiInterface
 	 */
 	public function getUserCompanies($userId = 0, $onlyActive = false)
 	{
-		return $this->transport->getCompaniesByUser($userId);
+		return $this->transport->getCompaniesByUser($userId, $onlyActive);
 	}
 
 	/**
