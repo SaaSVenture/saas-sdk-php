@@ -100,6 +100,14 @@ interface ApiInterface
 	public function getActiveCompany();
 
 	/**
+	 * Set active company
+	 *
+	 * @param int Intended brand id
+	 * @return Saas\Sdk\ResourceObject
+	 */
+	public function setActiveCompany($id);
+
+	/**
 	 * Get current active user's companies
 	 *
 	 * @return Saas\Sdk\ResourceCollection

@@ -41,6 +41,15 @@ interface TransportInterface
 	public function getCompany($id);
 
 	/**
+	 * Switch user company
+	 *
+	 * @param int
+	 * @param int
+	 * @return Saas\Sdk\ResourceObject
+	 */
+	public function switchCompany($userId, $brandId);
+
+	/**
 	 * Get companies by user id
 	 *
 	 * @param int

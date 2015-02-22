@@ -72,6 +72,14 @@ class LocalTransport extends AbstractTransport implements TransportInterface
 	/**
 	 * @{inheritDoc}
 	 */
+	public function switchCompany($userId, $brandId)
+	{
+		throw new Exception('Not implemented');
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
 	public function getCompaniesByUser($userId = 0, $onlyActive = false)
 	{
 		$query = $this->getApiDBGateway()

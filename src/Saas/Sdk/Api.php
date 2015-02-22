@@ -213,6 +213,14 @@ final class Api implements ApiInterface
 	/**
 	 * @{inheritDoc}
 	 */
+	public function setActiveCompany($id)
+	{
+		return $this->transport->switchCompany($id);
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
 	public function getActiveUserCompanies()
 	{
 		return $this->getUserCompanies($this->session->get(self::SAAS_API_USER, 0));
