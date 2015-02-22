@@ -132,7 +132,7 @@ interface ApiInterface
 	/**
 	 * Get companies by user
 	 */
-	public function getUserCompanies($userId = 0);
+	public function getUserCompanies($userId = 0, $onlyActive = false);
 
 	/**
 	 * Destroy current active session

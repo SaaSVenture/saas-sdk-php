@@ -289,6 +289,7 @@ class ApiTest extends PHPUnit_Framework_TestCase
 
 		$this->assertInstanceOf('Saas\Sdk\ResourceObject', $company);
 		$this->assertEquals('FooCorp', $company['title']);
+		$this->assertEquals($company, $api->getCompany(1));
 	}
 
 	/**

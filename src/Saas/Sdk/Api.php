@@ -206,7 +206,8 @@ final class Api implements ApiInterface
 	 */
 	public function getActiveCompany()
 	{
-		return $this->getCompany($this->session->get(self::SAAS_API_COMPANY, 0));
+		$companies = $this->getUserCompanies($this->session->get(self::SAAS_API_COMPANY, 0), true);
+		return $companies->getIterator()->current();
 	}
 
 	/**
@@ -244,7 +245,7 @@ final class Api implements ApiInterface
 	/**
 	 * @{inheritDoc}
 	 */
-	public function getUserCompanies($userId = 0)
+	public function getUserCompanies($userId = 0, $onlyActive = false)
 	{
 		return $this->transport->getCompaniesByUser($userId);
 	}

@@ -27,6 +27,7 @@ interface TransportInterface
 	/**
 	 * Get user resource
 	 *
+	 * @param int
 	 * @return Saas\Sdk\ResourceObject
 	 */
 	public function getUser($id);
@@ -34,6 +35,7 @@ interface TransportInterface
 	/**
 	 * Get company resource
 	 *
+	 * @param int
 	 * @return Saas\Sdk\ResourceObject
 	 */
 	public function getCompany($id);
@@ -41,13 +43,16 @@ interface TransportInterface
 	/**
 	 * Get companies by user id
 	 *
+	 * @param int
+	 * @param bool
 	 * @return Saas\Sdk\ResourceCollection
 	 */
-	public function getCompaniesByUser($userId);
+	public function getCompaniesByUser($userId, $onlyActive = false);
 
 	/**
 	 * Get current company subscription
 	 *
+	 * @param int
 	 * @return Saas\Sdk\ResourceObject
 	 */
 	public function getCurrentSubscription($companyId);
