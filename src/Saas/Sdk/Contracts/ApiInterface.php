@@ -100,6 +100,13 @@ interface ApiInterface
 	public function getActiveCompany();
 
 	/**
+	 * Get current active user's companies
+	 *
+	 * @return Saas\Sdk\ResourceCollection
+	 */
+	public function getActiveUserCompanies();
+
+	/**
 	 * Get current active subscription
 	 *
 	 * @return Saas\Sdk\ResourceObject
@@ -121,6 +128,11 @@ interface ApiInterface
 	 * @return Saas\Sdk\ResourceObject
 	 */
 	public function getCompany($id = 0);
+
+	/**
+	 * Get companies by user
+	 */
+	public function getUserCompanies($userId = 0);
 
 	/**
 	 * Destroy current active session

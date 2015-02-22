@@ -72,6 +72,21 @@ class LocalTransport extends AbstractTransport implements TransportInterface
 	/**
 	 * @{inheritDoc}
 	 */
+	public function getCompaniesByUser($userId = 0)
+	{
+		$companies = $this->getApiDBGateway()
+						->table('brands')
+						->join('group_user_brand', 'brands.id', '=', 'group_user_brand.brand_id')
+						->where('group_user_brand.user_id', $userId)
+						->whereNull('group_user_brand.deleted_at')
+						->get();
+
+		return new ResourceCollection($companies);
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
 	public function getCurrentSubscription($companyId)
 	{
 		$subscription = $this->getApiDBGateway()

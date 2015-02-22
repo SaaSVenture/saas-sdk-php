@@ -63,6 +63,10 @@ class ApiTest extends PHPUnit_Framework_TestCase
 		$mock->shouldReceive('getCompany')->once()->andReturn(new ResourceObject(array(
 			'title' => 'FooCorp',
 		)));
+		$mock->shouldReceive('getCompaniesByUser')->once()->andReturn(new ResourceCollection(array(
+			array('title' => 'FooCorp'),
+			array('title' => 'BarCorp'),
+		)));
 		$mock->shouldReceive('getCurrentSubscription')->once()->andReturn(new ResourceObject(array(
 			'title' => 'Startup',
 			'status' => 'active',
@@ -285,6 +289,29 @@ class ApiTest extends PHPUnit_Framework_TestCase
 
 		$this->assertInstanceOf('Saas\Sdk\ResourceObject', $company);
 		$this->assertEquals('FooCorp', $company['title']);
+	}
+
+	/**
+	 * Get Companies Resource test
+	 *
+	 * @depends testApi
+	 */
+	public function testGetUserCompanies($api)
+	{
+		$companies = $api->getActiveUserCompanies();
+
+		$this->assertInstanceOf('Saas\Sdk\ResourceCollection', $companies);
+
+		foreach ($companies as $i => $company) {
+			switch ($i) {
+				case 0:
+					$this->assertEquals('FooCorp',$company['title']);
+					break;
+				case 1:
+					$this->assertEquals('BarCorp',$company['title']);
+					break;
+			}
+		}
 	}
 
 	/**

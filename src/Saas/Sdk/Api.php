@@ -212,6 +212,14 @@ final class Api implements ApiInterface
 	/**
 	 * @{inheritDoc}
 	 */
+	public function getActiveUserCompanies()
+	{
+		return $this->getUserCompanies($this->session->get(self::SAAS_API_USER, 0));
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
 	public function getActiveSubscription()
 	{
 		return $this->transport->getCurrentSubscription($this->session->get(self::SAAS_API_COMPANY, 0));
@@ -231,6 +239,14 @@ final class Api implements ApiInterface
 	public function getCompany($id = 0)
 	{
 		return $this->transport->getCompany($id);
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function getUserCompanies($userId = 0)
+	{
+		return $this->transport->getCompaniesByUser($userId);
 	}
 
 	/**

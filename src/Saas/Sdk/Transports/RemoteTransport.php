@@ -92,6 +92,20 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 	/**
 	 * @{inheritDoc}
 	 */
+	public function getCompaniesByUser($userId = 0)
+	{
+		try {
+			$response = $this->client->get('/api/company?user_id='.$userId, $this->defaultHeaders)->send();
+			$companiesData = $response->getBody();
+			return new ResourceCollection(json_decode($companiesData,true));
+		} catch (Exception $e) {
+			return new ResourceCollection();
+		}
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
 	public function getCurrentSubscription($companyId)
 	{
 		try {

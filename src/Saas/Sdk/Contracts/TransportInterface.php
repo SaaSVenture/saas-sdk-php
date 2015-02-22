@@ -39,6 +39,13 @@ interface TransportInterface
 	public function getCompany($id);
 
 	/**
+	 * Get companies by user id
+	 *
+	 * @return Saas\Sdk\ResourceCollection
+	 */
+	public function getCompaniesByUser($userId);
+
+	/**
 	 * Get current company subscription
 	 *
 	 * @return Saas\Sdk\ResourceObject
