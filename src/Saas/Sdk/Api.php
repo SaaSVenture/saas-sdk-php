@@ -294,10 +294,18 @@ final class Api implements ApiInterface
 			throw new RuntimeException($e->getMessage());
 		}
 
+		$state = '';
+		if ($app->sandbox_key == $this->credential->getKey()) {
+			$state = '?'.http_build_query(array(
+				'key' => $this->credential->getKey(),
+				'secret' => $this->credential->getSecret(),
+			));
+		}
+
 		return self::SAAS_API_HTTP_SCHEME
 					.$app->slug
 					.TransportInterface::SAAS_API_DOMAIN_SEPARATOR
 					.AbstractTransport::getApiRoot()
-					.$path;
+					.$path.$state;
 	}
 }
