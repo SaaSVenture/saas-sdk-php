@@ -167,6 +167,9 @@ final class Api implements ApiInterface
 		return $this->getAppUrl('/start/'.$plan);
 	}
 
+	/**
+	 * @{inheritDoc}
+	 */
 	public function checkSession($onSuccessCallback = null)
 	{
 		if (isset($_GET[self::SAAS_API_HASH])) {
@@ -295,12 +298,14 @@ final class Api implements ApiInterface
 		}
 
 		$state = '';
+		// @codeCoverageIgnoreStart
 		if ($app->sandbox_key == $this->credential->getKey()) {
 			$state = '?'.http_build_query(array(
 				'key' => $this->credential->getKey(),
 				'secret' => $this->credential->getSecret(),
 			));
 		}
+		// @codeCoverageIgnoreEnd
 
 		return self::SAAS_API_HTTP_SCHEME
 					.$app->slug
