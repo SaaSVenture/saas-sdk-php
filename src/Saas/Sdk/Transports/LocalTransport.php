@@ -46,6 +46,25 @@ class LocalTransport extends AbstractTransport implements TransportInterface
 	/**
 	 * @{inheritDoc}
 	 */
+	public function getOwnerAppIdentity()
+	{
+		$identity = $this->getApiDBGateway()
+					->table('themes')
+            		->join('brands', 'brands.id', '=', 'themes.instance_id')
+            		->join('attachment', 'attachment.id', '=', 'themes.attachment_id')
+					->where('themes.instance_type', 'Brand')
+					->where('brands.key', $this->credential->getKey())
+					->where('brands.secret', $this->credential->getSecret())
+            		->select('themes.tile', 'themes.position', 'themes.background_color', 'themes.theme_color', 
+            				'themes.overlay_color', 'themes.button_color', 'themes.link_color', 'attachment.url')
+					->first();
+
+		return new ResourceObject($identity);
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
 	public function getUser($id)
 	{
 		$user = $this->getApiDBGateway()

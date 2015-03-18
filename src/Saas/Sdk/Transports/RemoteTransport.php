@@ -64,6 +64,20 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 	/**
 	 * @{inheritDoc}
 	 */
+	public function getOwnerAppIdentity()
+	{
+		try {
+			$response = $this->client->get('/api/instance/identity', $this->defaultHeaders)->send();
+			$identityData = $response->getBody();
+			return new ResourceObject(json_decode($identityData,true));
+		} catch (Exception $e) {
+			return new ResourceObject();
+		}
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
 	public function getUser($id)
 	{
 		try {

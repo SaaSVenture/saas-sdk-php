@@ -170,6 +170,14 @@ final class Api implements ApiInterface
 	/**
 	 * @{inheritDoc}
 	 */
+	public function getOriginalAppIdentity()
+	{
+		return $this->transport->getOwnerAppIdentity();
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
 	public function checkSession($onSuccessCallback = null)
 	{
 		if (isset($_GET[self::SAAS_API_HASH])) {

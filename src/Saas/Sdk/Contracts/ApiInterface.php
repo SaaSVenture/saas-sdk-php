@@ -72,6 +72,13 @@ interface ApiInterface
 	public function getPurchaseUrl($plan);
 
 	/**
+	 * Get instance branding data (Identity)
+	 *
+	 * @return Saas\Sdk\ResourceObject
+	 */
+	public function getOriginalAppIdentity();
+
+	/**
 	 * Check session
 	 *
 	 * @return void

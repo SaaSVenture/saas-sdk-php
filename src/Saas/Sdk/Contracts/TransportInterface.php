@@ -25,6 +25,13 @@ interface TransportInterface
 	public function getOwnerApp();
 
 	/**
+	 * Get the app's identity
+	 *
+	 * @return Saas\Sdk\ResourceObject
+	 */
+	public function getOwnerAppIdentity();
+
+	/**
 	 * Get user resource
 	 *
 	 * @param int
