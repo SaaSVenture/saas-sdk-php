@@ -56,6 +56,16 @@ class ApiTest extends PHPUnit_Framework_TestCase
 			'url' => 'foo.com',
 			'slug' => 'foo'
 		)));
+		$mock->shouldReceive('getOwnerAppIdentity')->once()->andReturn(new ResourceObject(array(
+			'url' => 'http://saasapi.com/media/brand/background/1',
+			'tile' => 0,
+			'position' => 'left',
+			'background_color' => '#fff',
+			'theme_color' => '#000000',
+			'overlay_color' => '#fff',
+			'button_color' => '#000000',
+			'link_color' => '#000000',
+		)));
 		$mock->shouldReceive('getUser')->once()->andReturn(new ResourceObject(array(
 			'name' => 'Mr. Foo',
 			'email' => 'foo@foo.com'
@@ -216,6 +226,26 @@ class ApiTest extends PHPUnit_Framework_TestCase
 
 		$this->setExpectedException('Exception');
 		$invalidApi->getPurchaseUrl('Random');
+	}
+
+	/**
+	 * Get identity
+	 *
+	 * @depends testApi
+	 */
+	public function testGetOriginalAppIdentity($api)
+	{
+		$identity = $api->getOriginalAppIdentity();
+
+		$this->assertInstanceOf('Saas\Sdk\ResourceObject', $identity);
+		$this->assertEquals('http://saasapi.com/media/brand/background/1', $identity['url']);
+		$this->assertEquals(0, $identity['tile']);
+		$this->assertEquals('left', $identity['position']);
+		$this->assertEquals('#fff', $identity['background_color']);
+		$this->assertEquals('#000000', $identity['theme_color']);
+		$this->assertEquals('#fff', $identity['overlay_color']);
+		$this->assertEquals('#000000', $identity['button_color']);
+		$this->assertEquals('#000000', $identity['link_color']);
 	}
 
 	/**
