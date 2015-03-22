@@ -55,9 +55,15 @@ class LocalTransport extends AbstractTransport implements TransportInterface
 					->where('themes.instance_type', 'Brand')
 					->where('brands.key', $this->credential->getKey())
 					->where('brands.secret', $this->credential->getSecret())
-            		->select('themes.tile', 'themes.position', 'themes.background_color', 'themes.theme_color', 
+            		->select('themes.tile', 'themes.position', 'themes.background_color', 'themes.theme_color', 'themes.instance_id',
             				'themes.overlay_color', 'themes.button_color', 'themes.link_color', 'attachment.url')
 					->first();
+
+		if ($identity) {
+			// Attach logo
+			$identity['logo_url'] = 'http://'. static::getApiRoot().'/media/brand/logo/'.$identity['instance_id'].'?size=small';
+			unset($identity['instance_id']);
+		}
 
 		return new ResourceObject($identity);
 	}
