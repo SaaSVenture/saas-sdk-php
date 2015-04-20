@@ -38,9 +38,11 @@ interface ApiInterface
 	 *
 	 * @param  string
 	 * @param  string
+	 * @param  string
+	 * @param  bool
 	 * @return string
 	 */
-	public function getExchangeUrl($userId = null, $companyId = null, $sessionId = null);
+	public function getExchangeUrl($userId = null, $companyId = null, $sessionId = null, $interactiveMode = false);
 
 	/**
 	 * Get the profile url for current active user

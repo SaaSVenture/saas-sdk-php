@@ -142,10 +142,10 @@ final class Api implements ApiInterface
 	/**
 	 * @{inheritDoc}
 	 */
-	public function getExchangeUrl($userId = null, $companyId = null, $sessionId = null)
+	public function getExchangeUrl($userId = null, $companyId = null, $sessionId = null, $interactiveMode = false)
 	{
 		// Main payload, API key and secret
-		$payload = array('key' => $this->credential->getKey(), 'secret' => $this->credential->getSecret());
+		$payload = array('key' => $this->credential->getKey(), 'secret' => $this->credential->getSecret(), 'interactive' => $interactiveMode);
 
 		// User id and Company id (active)
 		if (!empty($userId) && !empty($companyId)) {
