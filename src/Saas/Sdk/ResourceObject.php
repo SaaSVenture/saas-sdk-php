@@ -21,7 +21,7 @@ class ResourceObject implements ArrayAccess
 	 *
 	 * @param mixed 
 	 */
-	public function __construct($resource)
+	public function __construct($resource = null)
 	{
 		if (!empty($resource)) {
 			$this->data = (array) $resource;

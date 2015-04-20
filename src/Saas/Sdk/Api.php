@@ -86,7 +86,9 @@ final class Api implements ApiInterface
 		// @codeCoverageIgnoreStart
 		if (!$this->session) {
 			$this->session = new Session();
-			$this->session->isStarted() or $this->session->start();
+			try {
+				$this->session->isStarted() or $this->session->start();
+			} catch (Exception $e) {}
 		}
 		// @codeCoverageIgnoreEnd
 	}
