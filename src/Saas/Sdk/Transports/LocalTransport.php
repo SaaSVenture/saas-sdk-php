@@ -59,10 +59,23 @@ class LocalTransport extends AbstractTransport implements TransportInterface
             				'themes.overlay_color', 'themes.button_color', 'themes.link_color', 'attachment.url')
 					->first();
 
+		if ( ! $identity) {
+			$identity = $this->getApiDBGateway()
+					->table('themes')
+            		->join('brands', 'brands.id', '=', 'themes.instance_id')
+					->where('themes.instance_type', 'Brand')
+					->where('brands.key', $this->credential->getKey())
+					->where('brands.secret', $this->credential->getSecret())
+            		->select('themes.tile', 'themes.position', 'themes.background_color', 'themes.theme_color', 'themes.instance_id',
+            				'themes.overlay_color', 'themes.button_color', 'themes.link_color')
+					->first();
+		}
+
 		if ($identity) {
 			// Attach logo
 			$identity['logo_url'] = 'http://'. static::getApiRoot().'/media/brand/logo/'.$identity['instance_id'].'?size=small';
 			unset($identity['instance_id']);
+
 		} else {
 			// No themes yet
 			$rootIdentity = $this->getApiDBGateway()
