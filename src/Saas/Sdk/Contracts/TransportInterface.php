@@ -14,6 +14,7 @@ interface TransportInterface
 	const SAAS_API_INSTANCE = 'instances';
 	const SAAS_API_ROOT_DIR = 'app-saasapi';
 	const SAAS_API_DEFAULT_ROOT = 'saasapi.com';
+	const SAAS_API_DEVELOPER_ROOT = 'developer.saasapi.com';
 	const SAAS_API_EXT = '.php';
 	const SAAS_API_DOMAIN_SEPARATOR = '.';
 

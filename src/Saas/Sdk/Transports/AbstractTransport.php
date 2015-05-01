@@ -12,7 +12,7 @@ use Saas\Sdk\Contracts\TransportInterface;
 abstract class AbstractTransport
 {
 	/**
-	 * Main API root resolved
+	 * Main API root resolver
 	 *
 	 * @return string
 	 */
@@ -21,6 +21,20 @@ abstract class AbstractTransport
 		$root = !defined('SAAS_API_DEFAULT_ROOT') 
 			? TransportInterface::SAAS_API_DEFAULT_ROOT
 			: SAAS_API_DEFAULT_ROOT;
+
+		return rtrim($root,'/');
+	}
+
+	/**
+	 * Main API dev root resolver
+	 *
+	 * @return string
+	 */
+	public static function getApiDevRoot()
+	{
+		$root = !defined('SAAS_API_DEVELOPER_ROOT') 
+			? TransportInterface::SAAS_API_DEVELOPER_ROOT
+			: SAAS_API_DEVELOPER_ROOT;
 
 		return rtrim($root,'/');
 	}
