@@ -18,6 +18,9 @@ interface ApiInterface
 	const SAAS_API_SESSION = 'saas_api_session';
 	const SAAS_API_USER = 'saas_api_user';
 	const SAAS_API_COMPANY = 'saas_api_company';
+	const SAAS_API_ACTIVE_USER = 'active_user';
+	const SAAS_API_ACTIVE_COMPANY = 'active_company';
+	const SAAS_API_ACTIVE_SUBSCRIPTION = 'active_subscription';
 
 	/**
 	 * Get the original app url
@@ -164,4 +167,25 @@ interface ApiInterface
 	 * @return Saas\Sdk\ResourceCollection
 	 */
 	public function getPlans();
+
+	/**
+	 * Get available rules
+	 *
+	 * @return Saas\Sdk\ResourceCollection
+	 */
+	public function getRules();
+
+	/**
+	 * Get rules by nickname/slug
+	 *
+	 * @return Saas\Sdk\ResourceObject
+	 */
+	public function getRule($slug = null);
+
+	/**
+	 * Main ACL assertion API
+	 *
+	 * @return bool
+	 */
+	public function isAllowed($rule = null);
 }

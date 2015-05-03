@@ -178,6 +178,33 @@ class LocalTransport extends AbstractTransport implements TransportInterface
 	}
 
 	/**
+	 * @{inheritDoc}
+	 */
+	public function getRules()
+	{
+		throw new Exception('Not implemented');
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function getRule($slug = null)
+	{
+		throw new Exception('Not implemented');
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function checkAcl($rule = null, 
+							ResourceObject $user = null,
+							ResourceObject $company = null,
+							ResourceObject $subscription = null)
+	{
+		throw new Exception('Not implemented');
+	}
+
+	/**
 	 * Get DB Gateway
 	 *
 	 * @return Laravel DB

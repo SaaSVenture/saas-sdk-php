@@ -41,6 +41,13 @@ final class Api implements ApiInterface
 	private $session;
 
 	/**
+	 * API Repositories
+	 *
+	 * @var array
+	 */
+	private $repos;
+
+	/**
 	 * Main API factory
 	 *
 	 * @param string API Key
@@ -212,7 +219,14 @@ final class Api implements ApiInterface
 	 */
 	public function getActiveUser()
 	{
-		return $this->getUser($this->session->get(self::SAAS_API_USER, 0));
+		if (isset($this->repos[self::SAAS_API_ACTIVE_USER])) {
+			return $this->repos[self::SAAS_API_ACTIVE_USER];
+		}
+
+		$activeUser = $this->getUser($this->session->get(self::SAAS_API_USER, 0));
+		$this->repos[self::SAAS_API_ACTIVE_USER] = $activeUser;
+
+		return $activeUser;
 	}
 
 	/**
@@ -220,8 +234,15 @@ final class Api implements ApiInterface
 	 */
 	public function getActiveCompany()
 	{
+		if (isset($this->repos[self::SAAS_API_ACTIVE_COMPANY])) {
+			return $this->repos[self::SAAS_API_ACTIVE_COMPANY];
+		}
+
 		$companies = $this->getUserCompanies($this->session->get(self::SAAS_API_USER, 0), true);
-		return $companies->getIterator()->current();
+		$activeCompany = $companies->getIterator()->current();
+		$this->repos[self::SAAS_API_ACTIVE_COMPANY] = $activeCompany;
+
+		return $activeCompany;
 	}
 
 	/**
@@ -245,7 +266,14 @@ final class Api implements ApiInterface
 	 */
 	public function getActiveSubscription()
 	{
-		return $this->transport->getCurrentSubscription($this->session->get(self::SAAS_API_COMPANY, 0));
+		if (isset($this->repos[self::SAAS_API_ACTIVE_SUBSCRIPTION])) {
+			return $this->repos[self::SAAS_API_ACTIVE_SUBSCRIPTION];
+		}
+
+		$activeSubscription = $this->transport->getCurrentSubscription($this->session->get(self::SAAS_API_COMPANY, 0));
+		$this->repos[self::SAAS_API_ACTIVE_SUBSCRIPTION] = $activeSubscription;
+
+		return $activeSubscription;
 	}
 
 	/**
@@ -295,6 +323,30 @@ final class Api implements ApiInterface
 	}
 
 	/**
+	 * @{inheritDoc}
+	 */
+	public function getRules()
+	{
+		return $this->transport->getRules();
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function getRule($slug = null)
+	{
+		return $this->transport->getRule($slug);
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function isAllowed($rule = null)
+	{
+		return $this->transport->checkAcl($rule, $this->getActiveUser(), $this->getActiveCompany(), $this->getActiveSubscription());
+	}
+
+	/**
 	 * Common App URL Generator
 	 *
 	 * @param string Path
@@ -311,7 +363,7 @@ final class Api implements ApiInterface
 		$state = '';
 		// @codeCoverageIgnoreStart
 		if ($app->sandbox_key == $this->credential->getKey()
-			|| strpos($_SERVER['HTTP_HOST'], AbstractTransport::getApiDevRoot()) !== false) {
+			|| (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], AbstractTransport::getApiDevRoot()) !== false)) {
 			$state = '?'.http_build_query(array(
 				'key' => $this->credential->getKey(),
 				'secret' => $this->credential->getSecret(),

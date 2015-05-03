@@ -175,6 +175,57 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 	}
 
 	/**
+	 * @{inheritDoc}
+	 */
+	public function getRules()
+	{
+		try {
+			$response = $this->client->get('/api/rules', $this->defaultHeaders)->send();
+			$rulesData = $response->getBody();
+			return new ResourceCollection(json_decode($rulesData,true));
+		} catch (Exception $e) {
+			return new ResourceCollection();
+		}
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function getRule($slug = null)
+	{
+		try {
+			$response = $this->client->get('/api/rules/'.$slug, $this->defaultHeaders)->send();
+			$ruleData = $response->getBody();
+			return new ResourceObject(json_decode($ruleData,true));
+		} catch (Exception $e) {
+			return new ResourceObject();
+		}
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function checkAcl($rule = null, 
+							ResourceObject $user = null,
+							ResourceObject $company = null,
+							ResourceObject $subscription = null)
+	{
+		try {
+			$response = $this->client->get('/api/acl?'.http_build_query(array(
+				'rule' => $rule,
+				'user_id' => $user->id,
+				'company_id' => $company->id,
+				'subscription_id' => $subscription->id,
+			)), $this->defaultHeaders)->send();
+			$aclData = $response->getBody();
+			$aclResult = json_decode($aclData);
+			return (bool) $aclResult->is_allowed;
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+
+	/**
 	 * Get the base Saas API url
 	 *
 	 * @param mixed

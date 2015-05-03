@@ -90,6 +90,17 @@ class ApiTest extends PHPUnit_Framework_TestCase
 			array('name' => 'Startup', 'price' => '100'),
 			array('name' => 'Enterprise', 'price' => '500'),
 		)));
+		$mock->shouldReceive('getRules')->once()->andReturn(new ResourceCollection(array(
+			array('slug' => 'is_admin', 'title' => 'Administrator checker', 'metric_type' => 'system', 'is_deletable' => false),
+			array('slug' => 'export_and_printing', 'title' => 'Export/Printing Report', 'metric_type' => 'on_off', 'is_deletable' => true),
+		)));
+		$mock->shouldReceive('getRule')->once()->andReturn(new ResourceObject(array(
+			'slug' => 'is_admin', 
+			'title' => 'Administrator checker', 
+			'metric_type' => 'system', 
+			'is_deletable' => false
+		)));
+		$mock->shouldReceive('checkAcl')->once()->andReturn(true);
 
 		return $mock;
 	}
@@ -160,14 +171,65 @@ class ApiTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Instance Exchange URL Getter test
+	 * Instance Exchange URL Getter test (non interactive)
 	 *
 	 * @depends testApi
 	 */
-	public function testGetExchangeUrl($api)
+	public function testGetExchangeUrlNonInteractive($api)
 	{
-		$expectedExchangeUrl = 'http://saasapi.com/exchange?key=some-key&secret=s0m3s3cr3t&user_id=1&company_id=2&session_id=3';
-		$this->assertEquals($expectedExchangeUrl, $api->getExchangeUrl(1,2,3));
+		// Non interactive
+		$resultUrl = $api->getExchangeUrl(1,2,3);
+		$resultComps = parse_url($resultUrl);
+
+		$this->assertArrayHasKey('query', $resultComps);
+
+		$resultQuery = $resultComps['query'];
+		parse_str($resultQuery);
+
+		$this->assertTrue(isset($key));
+		$this->assertTrue(isset($secret));
+		$this->assertTrue(isset($interactive));
+		$this->assertTrue(isset($user_id));
+		$this->assertTrue(isset($company_id));
+		$this->assertTrue(isset($session_id));
+
+		$this->assertEquals('some-key', $key);
+		$this->assertEquals('s0m3s3cr3t', $secret);
+		$this->assertEquals('0', $interactive);
+		$this->assertEquals('1', $user_id);
+		$this->assertEquals('2', $company_id);
+		$this->assertEquals('3', $session_id);
+	}
+
+	/**
+	 * Instance Exchange URL Getter test (interactive)
+	 *
+	 * @depends testApi
+	 */
+	public function testGetExchangeUrlInteractive($api)
+	{
+		// Interactive mode
+		$resultUrl = $api->getExchangeUrl(1,2,3, true);
+		$resultComps = parse_url($resultUrl);
+
+		$this->assertArrayHasKey('query', $resultComps);
+
+		$resultQuery = $resultComps['query'];
+		parse_str($resultQuery);
+
+		$this->assertTrue(isset($key));
+		$this->assertTrue(isset($secret));
+		$this->assertTrue(isset($interactive));
+		$this->assertTrue(isset($user_id));
+		$this->assertTrue(isset($company_id));
+		$this->assertTrue(isset($session_id));
+
+		$this->assertEquals('some-key', $key);
+		$this->assertEquals('s0m3s3cr3t', $secret);
+		$this->assertEquals('1', $interactive);
+		$this->assertEquals('1', $user_id);
+		$this->assertEquals('2', $company_id);
+		$this->assertEquals('3', $session_id);
 	}
 
 	/**
@@ -402,5 +464,61 @@ class ApiTest extends PHPUnit_Framework_TestCase
 					break;
 			}
 		}
+	}
+
+	/**
+	 * Get rules
+	 *
+	 * @depends testApi
+	 */
+	public function testGetRules($api)
+	{
+		$rules = $api->getRules();
+
+		$this->assertInstanceOf('Saas\Sdk\ResourceCollection', $rules);
+
+		foreach ($rules as $i => $rule) {
+			switch ($i) {
+				case 0:
+					$this->assertEquals('is_admin', $rule['slug']);
+					$this->assertEquals('Administrator checker', $rule['title']);
+					$this->assertEquals('system', $rule['metric_type']);
+					$this->assertFalse($rule['is_deletable']);
+					break;
+
+				case 1:
+					$this->assertEquals('export_and_printing', $rule['slug']);
+					$this->assertEquals('Export/Printing Report', $rule['title']);
+					$this->assertEquals('on_off', $rule['metric_type']);
+					$this->assertTrue($rule['is_deletable']);
+					break;
+			}
+		}
+	}
+
+	/**
+	 * Get rule resource
+	 *
+	 * @depends testApi
+	 */
+	public function testGetRule($api)
+	{
+		$rule = $api->getRule('is_admin');
+
+		$this->assertInstanceOf('Saas\Sdk\ResourceObject', $rule);
+		$this->assertEquals('is_admin', $rule['slug']);
+		$this->assertEquals('Administrator checker', $rule['title']);
+		$this->assertEquals('system', $rule['metric_type']);
+		$this->assertFalse($rule['is_deletable']);
+	}
+
+	/**
+	 * ACL assertion
+	 *
+	 * @depends testApi
+	 */
+	public function testIsAllowed($api)
+	{
+		$this->assertTrue($api->isAllowed('is_admin'));
 	}
 }
