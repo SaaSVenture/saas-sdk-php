@@ -16,6 +16,8 @@ use Exception;
 
 class RemoteTransport extends AbstractTransport implements TransportInterface
 {
+	const API_LIMIT_EXCEEDS = 'API rate limit exceeded or your subscription no longer active.';
+
 	/**
 	 * @var Saas\Sdk\Credential
 	 */
@@ -85,6 +87,10 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 			$userData = $response->getBody();
 			return new ResourceObject(json_decode($userData,true));
 		} catch (Exception $e) {
+			if ($this->isNotAllowed($e)) {
+				throw new Exception(self::API_LIMIT_EXCEEDS);
+			}
+
 			return new ResourceObject();
 		}
 	}
@@ -99,6 +105,10 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 			$brandData = $response->getBody();
 			return new ResourceObject(json_decode($brandData,true));
 		} catch (Exception $e) {
+			if ($this->isNotAllowed($e)) {
+				throw new Exception(self::API_LIMIT_EXCEEDS);
+			}
+
 			return new ResourceObject();
 		}
 	}
@@ -130,6 +140,10 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 			$companiesData = $response->getBody();
 			return new ResourceCollection(json_decode($companiesData,true));
 		} catch (Exception $e) {
+			if ($this->isNotAllowed($e)) {
+				throw new Exception(self::API_LIMIT_EXCEEDS);
+			}
+			
 			return new ResourceCollection();
 		}
 	}
@@ -144,6 +158,10 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 			$subscriptionData = $response->getBody();
 			return new ResourceObject(json_decode($subscriptionData,true));
 		} catch (Exception $e) {
+			if ($this->isNotAllowed($e)) {
+				throw new Exception(self::API_LIMIT_EXCEEDS);
+			}
+
 			return new ResourceObject();
 		}
 	}
@@ -170,6 +188,10 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 			$plansData = $response->getBody();
 			return new ResourceCollection(json_decode($plansData,true));
 		} catch (Exception $e) {
+			if ($this->isNotAllowed($e)) {
+				throw new Exception(self::API_LIMIT_EXCEEDS);
+			}
+
 			return new ResourceCollection();
 		}
 	}
@@ -184,6 +206,10 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 			$rulesData = $response->getBody();
 			return new ResourceCollection(json_decode($rulesData,true));
 		} catch (Exception $e) {
+			if ($this->isNotAllowed($e)) {
+				throw new Exception(self::API_LIMIT_EXCEEDS);
+			}
+
 			return new ResourceCollection();
 		}
 	}
@@ -198,6 +224,10 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 			$ruleData = $response->getBody();
 			return new ResourceObject(json_decode($ruleData,true));
 		} catch (Exception $e) {
+			if ($this->isNotAllowed($e)) {
+				throw new Exception(self::API_LIMIT_EXCEEDS);
+			}
+
 			return new ResourceObject();
 		}
 	}
@@ -221,6 +251,10 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 			$aclResult = json_decode($aclData);
 			return (bool) $aclResult->is_allowed;
 		} catch (Exception $e) {
+			if ($this->isNotAllowed($e)) {
+				throw new Exception(self::API_LIMIT_EXCEEDS);
+			}
+
 			return false;
 		}
 	}
@@ -244,5 +278,17 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 	protected function getAuthorizationHash()
 	{
 		return base64_encode($this->credential->getKey().':'.$this->credential->getSecret());
+	}
+
+	/**
+	 * Check exception details
+	 *
+	 * @param Exception
+	 * @return bool
+	 */
+	protected function isNotAllowed(Exception $e) 
+	{
+		$message = $e->getMessage();
+		return strpos($message, '[status code] 403') !== false;
 	}
 }
