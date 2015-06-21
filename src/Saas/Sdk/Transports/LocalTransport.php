@@ -212,7 +212,15 @@ class LocalTransport extends AbstractTransport implements TransportInterface
 	public function getApiDBGateway()
 	{
 		$instanceRootDir = app_path();
-		$host = $_SERVER['HTTP_HOST'];
+
+		$rawHost = $_SERVER['HTTP_HOST'];
+		$comps = parse_url($rawHost);
+
+		if (isset($comps['host']) && isset($comps['port'])) {
+			$host = $comps['host'];
+		} else {
+			$host = $rawHost;
+		}
 
 		$masterAppDb = str_replace(self::SAAS_API_INSTANCE.DIRECTORY_SEPARATOR.$host.DIRECTORY_SEPARATOR.self::SAAS_API_APP,
 									 self::SAAS_API_ROOT_DIR.DIRECTORY_SEPARATOR.self::SAAS_API_BOOTSTRAP.DIRECTORY_SEPARATOR.self::SAAS_API_APP.self::SAAS_API_EXT, 
