@@ -13,6 +13,7 @@ use Saas\Sdk\Transports\AbstractTransport;
 use Saas\Sdk\Transports\LocalTransport;
 use Saas\Sdk\Transports\RemoteTransport;
 use Saas\Sdk\Credential;
+use Saas\Sdk\ResourceObject;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Exception, RuntimeException;
@@ -242,6 +243,11 @@ final class Api implements ApiInterface
 
 		$companies = $this->getUserCompanies($this->session->get(self::SAAS_API_USER, 0), true);
 		$activeCompany = $companies->getIterator()->current();
+
+		if (!isset($activeCompany)) {
+			$activeCompany = new ResourceObject();
+		}
+
 		$this->repos[self::SAAS_API_ACTIVE_COMPANY] = $activeCompany;
 
 		return $activeCompany;
