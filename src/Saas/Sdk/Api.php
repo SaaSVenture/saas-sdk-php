@@ -156,8 +156,10 @@ final class Api implements ApiInterface
 		$payload = array('key' => $this->credential->getKey(), 'secret' => $this->credential->getSecret(), 'interactive' => $interactiveMode);
 
 		// User id and Company id (active)
-		if (!empty($userId) && !empty($companyId)) {
+		if (!empty($userId)) {
 			$payload['user_id'] = $userId;
+		}
+		if (!empty($companyId)) {
 			$payload['company_id'] = $companyId;
 		}
 
