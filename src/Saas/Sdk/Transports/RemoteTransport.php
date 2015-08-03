@@ -12,6 +12,7 @@ use Saas\Sdk\Credential;
 use Saas\Sdk\ResourceObject;
 use Saas\Sdk\ResourceCollection;
 use Guzzle\Http\Client;
+use Guzzle\Http\Exception\CurlException;
 use Exception;
 
 class RemoteTransport extends AbstractTransport implements TransportInterface
@@ -47,6 +48,7 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 		);
 
 		$this->client = new Client($this->baseUrl());
+		$this->checkSsl();
 	}
 
 	/**
@@ -267,7 +269,24 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 	 */
 	protected function baseUrl($path = '')
 	{
-		return 'http://'.static::getApiRoot().$path;
+		return 'https://'.static::getApiRoot().$path;
+	}
+
+	/**
+	 * Check SSL 
+	 *
+	 * @return void
+	 */
+	protected function checkSsl()
+	{
+		try {
+			$this->client->get('/')->send()->getBody();
+		} catch (CurlException $e) {
+			if ($e->getErrorNo() == 51) {
+				// Strict hosting detected, skip ssl host verifier
+				$this->client->setSslVerification(false);
+			}
+		}
 	}
 
 	/**
