@@ -55,7 +55,7 @@ class ApiTest extends PHPUnit_Framework_TestCase
 		$mock->shouldReceive('getOwnerApp')->once()->andReturn(new ResourceObject(array(
 			'url' => 'foo.com',
 			'slug' => 'foo',
-			'alias' => 'foo.saasapi.com',
+			'alias' => 'http://foo.saasapi.com',
 		)));
 		$mock->shouldReceive('getOwnerAppIdentity')->once()->andReturn(new ResourceObject(array(
 			'url' => 'http://saasapi.com/media/brand/background/1',
