@@ -43,7 +43,7 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 	{
 		$this->credential = $credential;
 		$this->defaultHeaders = array(
-			'X-Saas-Origin-Domain' => $_SERVER['HTTP_HOST'],
+			'X-Saas-Origin-Domain' => static::getCurrentHost(),
 			'Authorization' => 'Basic '.$this->getAuthorizationHash(),
 		);
 

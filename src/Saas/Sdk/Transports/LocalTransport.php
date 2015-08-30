@@ -40,6 +40,10 @@ class LocalTransport extends AbstractTransport implements TransportInterface
 					->where('secret', $this->credential->getSecret())
 					->first();
 
+		if ($brand) {
+			$brand->alias = $this->getAlias();
+		}
+
 		return new ResourceObject($brand);
 	}
 
@@ -213,7 +217,7 @@ class LocalTransport extends AbstractTransport implements TransportInterface
 	{
 		$instanceRootDir = app_path();
 
-		$rawHost = $_SERVER['HTTP_HOST'];
+		$rawHost = static::getCurrentHost();
 		$comps = parse_url($rawHost);
 
 		if (isset($comps['host']) && isset($comps['port'])) {
@@ -232,5 +236,29 @@ class LocalTransport extends AbstractTransport implements TransportInterface
 		} else {
 			throw new RuntimeException('Invalid instance path!');
 		}
+	}
+
+	/**
+	 * Get Alias
+	 *
+	 * @return string
+	 */
+	public function getAlias()
+	{
+		$cName = app_path('storage/cname');
+		$rawHost = static::getCurrentHost();
+		$comps = parse_url($rawHost);
+
+		if (isset($comps['host']) && isset($comps['port'])) {
+			$alias = $comps['host'];
+		} else {
+			$alias = $rawHost;
+		}
+
+		if (is_file($cName)) {
+			$alias = file_get_contents($cName);
+		}
+
+		return 'http://'.$alias;
 	}
 }

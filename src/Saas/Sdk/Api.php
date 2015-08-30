@@ -80,8 +80,8 @@ final class Api implements ApiInterface
 		// Pick appropriate transport, if it wasn't provided
 		// @codeCoverageIgnoreStart
 		if (!$this->transport) {
-			if (strpos($_SERVER['HTTP_HOST'], AbstractTransport::getApiRoot()) !== false
-				&& strpos($_SERVER['HTTP_HOST'], AbstractTransport::getApiDevRoot()) === false) {
+			if (strpos(AbstractTransport::getCurrentHost(), AbstractTransport::getApiRoot()) !== false
+				&& strpos(AbstractTransport::getCurrentHost(), AbstractTransport::getApiDevRoot()) === false) {
 				$this->transport = new LocalTransport($this->credential);
 			} else {
 				$this->transport = new RemoteTransport($this->credential);
@@ -371,7 +371,7 @@ final class Api implements ApiInterface
 		$state = '';
 		// @codeCoverageIgnoreStart
 		if ($app->sandbox_key == $this->credential->getKey()
-			|| (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], AbstractTransport::getApiDevRoot()) !== false)) {
+			|| (isset(AbstractTransport::getCurrentHost()) && strpos(AbstractTransport::getCurrentHost(), AbstractTransport::getApiDevRoot()) !== false)) {
 			$state = '?'.http_build_query(array(
 				'key' => $this->credential->getKey(),
 				'secret' => $this->credential->getSecret(),

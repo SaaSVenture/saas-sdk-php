@@ -38,4 +38,14 @@ abstract class AbstractTransport
 
 		return rtrim($root,'/');
 	}
+
+	/**
+	 * Main API to get current host
+	 *
+	 * @return string
+	 */
+	public static function getCurrentHost()
+	{
+		return isset($_SERVER['SAAS_ORIGIN_HOST']) ? $_SERVER['SAAS_ORIGIN_HOST'] : $_SERVER['HTTP_HOST'];
+	}
 }
