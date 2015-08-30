@@ -379,10 +379,6 @@ final class Api implements ApiInterface
 		}
 		// @codeCoverageIgnoreEnd
 
-		return self::SAAS_API_HTTP_SCHEME
-					.$app->slug
-					.TransportInterface::SAAS_API_DOMAIN_SEPARATOR
-					.AbstractTransport::getApiRoot()
-					.$path.$state;
+		return $app->alias.$path.$state;
 	}
 }
