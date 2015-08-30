@@ -40,6 +40,16 @@ abstract class AbstractTransport
 	}
 
 	/**
+	 * Determine whether current request has a valid host
+	 *
+	 * @return boolean
+	 */
+	public static function hasHost()
+	{
+		return isset($_SERVER['SAAS_ORIGIN_HOST']) || isset($_SERVER['HTTP_HOST']);
+	}
+
+	/**
 	 * Main API to get current host
 	 *
 	 * @return string

@@ -371,7 +371,7 @@ final class Api implements ApiInterface
 		$state = '';
 		// @codeCoverageIgnoreStart
 		if ($app->sandbox_key == $this->credential->getKey()
-			|| (isset(AbstractTransport::getCurrentHost()) && strpos(AbstractTransport::getCurrentHost(), AbstractTransport::getApiDevRoot()) !== false)) {
+			|| (AbstractTransport::hasHost() && strpos(AbstractTransport::getCurrentHost(), AbstractTransport::getApiDevRoot()) !== false)) {
 			$state = '?'.http_build_query(array(
 				'key' => $this->credential->getKey(),
 				'secret' => $this->credential->getSecret(),
