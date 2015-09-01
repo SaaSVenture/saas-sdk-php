@@ -134,6 +134,20 @@ interface ApiInterface
 	public function getActiveSubscription();
 
 	/**
+	 * Get all users
+	 *
+	 * @return Saas\Sdk\ResourceCollection
+	 */
+	public function getUsers();
+
+	/**
+	 * Get all companies
+	 *
+	 * @return Saas\Sdk\ResourceCollection
+	 */
+	public function getCompanies();
+
+	/**
 	 * Get user by id
 	 *
 	 * @param int

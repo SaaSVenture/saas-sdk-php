@@ -287,6 +287,22 @@ final class Api implements ApiInterface
 	/**
 	 * @{inheritDoc}
 	 */
+	public function getUsers()
+	{
+		return $this->transport->getUsers();
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function getCompanies()
+	{
+		return $this->transport->getCompanies();
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
 	public function getUser($id = 0)
 	{
 		return $this->transport->getUser($id);

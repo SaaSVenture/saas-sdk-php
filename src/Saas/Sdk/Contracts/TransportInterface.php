@@ -33,6 +33,20 @@ interface TransportInterface
 	public function getOwnerAppIdentity();
 
 	/**
+	 * Get all users
+	 *
+	 * @return Saas\Sdk\ResourceCollection
+	 */
+	public function getUsers();
+
+	/**
+	 * Get all companies
+	 *
+	 * @return Saas\Sdk\ResourceCollection
+	 */
+	public function getCompanies();
+
+	/**
 	 * Get user resource
 	 *
 	 * @param int
