@@ -169,11 +169,40 @@ interface ApiInterface
 	public function getUserCompanies($userId = 0, $onlyActive = false);
 
 	/**
-	 * Destroy current active session
+	 * Get inbox
 	 *
-	 * @return void
+	 * @param int
+	 * @return Saas\Sdk\ResourceCollection
 	 */
-	public function logout();
+	public function getUserInbox($userId);
+
+	/**
+	 * Get outbox
+	 *
+	 * @param int
+	 * @return Saas\Sdk\ResourceCollection
+	 */
+	public function getUserOutbox($userId);
+
+	/**
+	 * Send a message
+	 *
+	 * @param int
+	 * @param int
+	 * @param string
+	 * @param string
+	 * @return Saas\Sdk\ResourceObject
+	 */
+	public function sendMessage($fromId, $toId, $subject, $message);
+
+	/**
+	 * Get a message info
+	 *
+	 * @param int
+	 * @param bool
+	 * @return Saas\Sdk\ResourceObject
+	 */
+	public function getMessage($id, $markAsRead = true);
 
 	/**
 	 * Get available plans
@@ -202,4 +231,11 @@ interface ApiInterface
 	 * @return bool
 	 */
 	public function isAllowed($rule = null);
+
+	/**
+	 * Destroy current active session
+	 *
+	 * @return void
+	 */
+	public function logout();
 }

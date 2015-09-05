@@ -240,6 +240,38 @@ class LocalTransport extends AbstractTransport implements TransportInterface
 	}
 
 	/**
+	 * @{inheritDoc}
+	 */
+	public function getInboxByUser($userId)
+	{
+		throw new Exception('Not implemented');
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function getOutboxByUser($userId)
+	{
+		throw new Exception('Not implemented');
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function sendUserMessage($fromId, $toId, $subject, $message)
+	{
+		throw new Exception('Not implemented');
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function getMessage($id, $markAsRead = true)
+	{
+		throw new Exception('Not implemented');
+	}
+
+	/**
 	 * Get DB Gateway
 	 *
 	 * @return Laravel DB

@@ -327,15 +327,33 @@ final class Api implements ApiInterface
 	/**
 	 * @{inheritDoc}
 	 */
-	public function logout()
+	public function getUserInbox($userId)
 	{
-		$sessionId = $this->session->get(self::SAAS_API_SESSION);
-		$this->session->remove(self::SAAS_API_LOGIN);
-		$this->session->remove(self::SAAS_API_SESSION);
-		$this->session->remove(self::SAAS_API_USER);
-		$this->session->remove(self::SAAS_API_COMPANY);
+		return $this->transport->getInboxByUser($userId);
+	}
 
-		$this->transport->clearSession($sessionId);
+	/**
+	 * @{inheritDoc}
+	 */
+	public function getUserOutbox($userId)
+	{
+		return $this->transport->getOutboxByUser($userId);
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function sendMessage($fromId, $toId, $subject, $message)
+	{
+		return $this->transport->sendUserMessage($fromId, $toId, $subject, $message);
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function getMessage($id, $markAsRead = true)
+	{
+		return $this->transport->getMessage($id, $markAsRead);
 	}
 
 	/**
@@ -368,6 +386,20 @@ final class Api implements ApiInterface
 	public function isAllowed($rule = null)
 	{
 		return $this->transport->checkAcl($rule, $this->getActiveUser(), $this->getActiveCompany(), $this->getActiveSubscription());
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function logout()
+	{
+		$sessionId = $this->session->get(self::SAAS_API_SESSION);
+		$this->session->remove(self::SAAS_API_LOGIN);
+		$this->session->remove(self::SAAS_API_SESSION);
+		$this->session->remove(self::SAAS_API_USER);
+		$this->session->remove(self::SAAS_API_COMPANY);
+
+		$this->transport->clearSession($sessionId);
 	}
 
 	/**

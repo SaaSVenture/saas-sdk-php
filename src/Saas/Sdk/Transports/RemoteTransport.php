@@ -104,7 +104,7 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 	{
 		try {
 			$response = $this->client->get('/api/companies', $this->defaultHeaders)->send();
-			$companyDatas = $response->getBody();
+			$companiesData = $response->getBody();
 			return new ResourceCollection(json_decode($companiesData,true));
 		} catch (Exception $e) {
 			if ($this->isNotAllowed($e)) {
@@ -299,6 +299,84 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 	}
 
 	/**
+	 * @{inheritDoc}
+	 */
+	public function getInboxByUser($userId)
+	{
+		try {
+			$response = $this->client->get('/api/inbox/'.$userId, $this->defaultHeaders)->send();
+			$inboxData = $response->getBody();
+			return new ResourceCollection(json_decode($inboxData,true));
+		} catch (Exception $e) {
+			if ($this->isNotAllowed($e)) {
+				throw new Exception(self::API_LIMIT_EXCEEDS);
+			}
+
+			return new ResourceCollection();
+		}
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function getOutboxByUser($userId)
+	{
+		try {
+			$response = $this->client->get('/api/outbox/'.$userId, $this->defaultHeaders)->send();
+			$outboxData = $response->getBody();
+			return new ResourceCollection(json_decode($outboxData,true));
+		} catch (Exception $e) {
+			if ($this->isNotAllowed($e)) {
+				throw new Exception(self::API_LIMIT_EXCEEDS);
+			}
+
+			return new ResourceCollection();
+		}
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function sendUserMessage($fromId, $toId, $subject, $message)
+	{
+		try {
+			$data = array(
+				'from_user' => $fromId,
+				'to_user' => $toId,
+				'subject' => $subject,
+				'body' => $message,
+			);
+			$response = $this->client->get('/api/message/0?'.http_build_query($data), $this->defaultHeaders)->send();
+			$message = $response->getBody();
+			return new ResourceObject(json_decode($message,true));
+		} catch (Exception $e) {
+			if ($this->isNotAllowed($e)) {
+				throw new Exception(self::API_LIMIT_EXCEEDS);
+			}
+
+			return new ResourceObject();
+		}
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function getMessage($id, $markAsRead = true)
+	{
+		try {
+			$response = $this->client->get('/api/message/'.$id.'?as_read='.var_export($markAsRead, true), $this->defaultHeaders)->send();
+			$message = $response->getBody();
+			return new ResourceObject(json_decode($message,true));
+		} catch (Exception $e) {
+			if ($this->isNotAllowed($e)) {
+				throw new Exception(self::API_LIMIT_EXCEEDS);
+			}
+
+			return new ResourceObject();
+		}
+	}
+
+	/**
 	 * Get the base Saas API url
 	 *
 	 * @param mixed
@@ -323,6 +401,8 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 				// Strict hosting detected, skip ssl host verifier
 				$this->client->setSslVerification(false);
 			}
+		} catch (Exception $e) {
+			die($e->getMessage());
 		}
 	}
 
