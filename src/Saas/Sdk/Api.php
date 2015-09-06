@@ -327,6 +327,14 @@ final class Api implements ApiInterface
 	/**
 	 * @{inheritDoc}
 	 */
+	public function getUserMessageStats($userId)
+	{
+		return $this->transport->getMessageStats($userId);
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
 	public function getUserInbox($userId, $perPage = 10, $page = 1)
 	{
 		return $this->transport->getInboxByUser($userId, $perPage, $page);

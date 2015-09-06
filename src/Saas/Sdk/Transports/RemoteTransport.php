@@ -301,6 +301,24 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 	/**
 	 * @{inheritDoc}
 	 */
+	public function getMessageStats($userId)
+	{
+		try {
+			$response = $this->client->get('/api/userstats/message/'.$userId, $this->defaultHeaders)->send();
+			$statsData = $response->getBody();
+			return new ResourceCollection(json_decode($statsData,true));
+		} catch (Exception $e) {
+			if ($this->isNotAllowed($e)) {
+				throw new Exception(self::API_LIMIT_EXCEEDS);
+			}
+
+			return new ResourceCollection();
+		}
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
 	public function getInboxByUser($userId, $perPage, $page)
 	{
 		try {

@@ -104,6 +104,14 @@ interface TransportInterface
 	public function getPlans();
 
 	/**
+	 * Get user message stats
+	 * 
+	 * @param int
+	 * @return Saas\Sdk\ResourceObject
+	 */
+	public function getMessageStats($userId);
+
+	/**
 	 * Get inbox by user
 	 *
 	 * @param string user id

@@ -169,6 +169,14 @@ interface ApiInterface
 	public function getUserCompanies($userId = 0, $onlyActive = false);
 
 	/**
+	 * Get user message stats
+	 * 
+	 * @param int
+	 * @return Saas\Sdk\ResourceObject
+	 */
+	public function getUserMessageStats($userId);
+
+	/**
 	 * Get inbox
 	 *
 	 * @param int
