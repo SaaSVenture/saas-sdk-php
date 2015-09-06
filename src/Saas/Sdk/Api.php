@@ -327,17 +327,17 @@ final class Api implements ApiInterface
 	/**
 	 * @{inheritDoc}
 	 */
-	public function getUserInbox($userId)
+	public function getUserInbox($userId, $perPage = 10, $page = 1)
 	{
-		return $this->transport->getInboxByUser($userId);
+		return $this->transport->getInboxByUser($userId, $perPage, $page);
 	}
 
 	/**
 	 * @{inheritDoc}
 	 */
-	public function getUserOutbox($userId)
+	public function getUserOutbox($userId, $perPage = 10, $page = 1)
 	{
-		return $this->transport->getOutboxByUser($userId);
+		return $this->transport->getOutboxByUser($userId, $perPage, $page);
 	}
 
 	/**
@@ -354,6 +354,14 @@ final class Api implements ApiInterface
 	public function getMessage($id, $markAsRead = true)
 	{
 		return $this->transport->getMessage($id, $markAsRead);
+	}
+
+	/**
+	 * @{inheritMessage}
+	 */
+	public function deleteMessage($id)
+	{
+		return $this->transport->deleteMessage($id);
 	}
 
 	/**

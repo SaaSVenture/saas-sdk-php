@@ -242,7 +242,7 @@ class LocalTransport extends AbstractTransport implements TransportInterface
 	/**
 	 * @{inheritDoc}
 	 */
-	public function getInboxByUser($userId)
+	public function getInboxByUser($userId, $perPage, $page)
 	{
 		throw new Exception('Not implemented');
 	}
@@ -250,7 +250,7 @@ class LocalTransport extends AbstractTransport implements TransportInterface
 	/**
 	 * @{inheritDoc}
 	 */
-	public function getOutboxByUser($userId)
+	public function getOutboxByUser($userId, $perPage, $page)
 	{
 		throw new Exception('Not implemented');
 	}
@@ -267,6 +267,14 @@ class LocalTransport extends AbstractTransport implements TransportInterface
 	 * @{inheritDoc}
 	 */
 	public function getMessage($id, $markAsRead = true)
+	{
+		throw new Exception('Not implemented');
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function deleteMessage($id)
 	{
 		throw new Exception('Not implemented');
 	}

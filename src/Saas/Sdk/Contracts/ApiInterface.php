@@ -172,17 +172,21 @@ interface ApiInterface
 	 * Get inbox
 	 *
 	 * @param int
+	 * @param int
+	 * @param int
 	 * @return Saas\Sdk\ResourceCollection
 	 */
-	public function getUserInbox($userId);
+	public function getUserInbox($userId, $perPage = 10, $page = 1);
 
 	/**
 	 * Get outbox
 	 *
 	 * @param int
+	 * @param int
+	 * @param int
 	 * @return Saas\Sdk\ResourceCollection
 	 */
-	public function getUserOutbox($userId);
+	public function getUserOutbox($userId, $perPage = 10, $page = 1);
 
 	/**
 	 * Send a message
@@ -203,6 +207,14 @@ interface ApiInterface
 	 * @return Saas\Sdk\ResourceObject
 	 */
 	public function getMessage($id, $markAsRead = true);
+
+	/**
+	 * Delete a message
+	 *
+	 * @param int
+	 * @return bool
+	 */
+	public function deleteMessage($id);
 
 	/**
 	 * Get available plans

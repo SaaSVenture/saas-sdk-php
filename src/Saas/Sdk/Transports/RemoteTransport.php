@@ -301,10 +301,10 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 	/**
 	 * @{inheritDoc}
 	 */
-	public function getInboxByUser($userId)
+	public function getInboxByUser($userId, $perPage, $page)
 	{
 		try {
-			$response = $this->client->get('/api/inbox/'.$userId, $this->defaultHeaders)->send();
+			$response = $this->client->get('/api/inbox/'.$userId.'/'.$perPage.'/'.$page, $this->defaultHeaders)->send();
 			$inboxData = $response->getBody();
 			return new ResourceCollection(json_decode($inboxData,true));
 		} catch (Exception $e) {
@@ -319,10 +319,10 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 	/**
 	 * @{inheritDoc}
 	 */
-	public function getOutboxByUser($userId)
+	public function getOutboxByUser($userId, $perPage, $page)
 	{
 		try {
-			$response = $this->client->get('/api/outbox/'.$userId, $this->defaultHeaders)->send();
+			$response = $this->client->get('/api/outbox/'.$userId.'/'.$perPage.'/'.$page, $this->defaultHeaders)->send();
 			$outboxData = $response->getBody();
 			return new ResourceCollection(json_decode($outboxData,true));
 		} catch (Exception $e) {
@@ -365,6 +365,24 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 	{
 		try {
 			$response = $this->client->get('/api/message/'.$id.'?as_read='.var_export($markAsRead, true), $this->defaultHeaders)->send();
+			$message = $response->getBody();
+			return new ResourceObject(json_decode($message,true));
+		} catch (Exception $e) {
+			if ($this->isNotAllowed($e)) {
+				throw new Exception(self::API_LIMIT_EXCEEDS);
+			}
+
+			return new ResourceObject();
+		}
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function deleteMessage($id)
+	{
+		try {
+			$response = $this->client->get('/api/message/'.$id.'?delete=true', $this->defaultHeaders)->send();
 			$message = $response->getBody();
 			return new ResourceObject(json_decode($message,true));
 		} catch (Exception $e) {

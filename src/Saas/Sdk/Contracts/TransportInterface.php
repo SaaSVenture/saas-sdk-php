@@ -102,4 +102,49 @@ interface TransportInterface
 	 * @return Saas\Sdk\ResourceCollection
 	 */
 	public function getPlans();
+
+	/**
+	 * Get inbox by user
+	 *
+	 * @param string user id
+	 * @param int    Total message per page
+	 * @param int    Page
+	 * @return Saas\Sdk\ResourceCollection
+	 */
+	public function getInboxByUser($userId, $perPage, $page);
+
+	/**
+	 * Get outbox by user
+	 *
+	 * @param string user id
+	 * @param int    Total message per page
+	 * @param int    Page
+	 * @return Saas\Sdk\ResourceCollection
+	 */
+	public function getOutboxByUser($userId, $perPage, $page);
+
+	/**
+	 * Send a message
+	 *
+	 * @param string Sender id
+	 * @param string Receiver id
+	 * @param string Message subject
+	 * @param string Message body
+	 * @return Saas\Sdk\ResourceObject
+	 */
+	public function sendUserMessage($fromId, $toId, $subject, $message);
+
+	/**
+	 * Get a message
+	 *
+	 * @param string 	Message id
+	 * @param boolean 	Set read status flag
+	 */
+	public function getMessage($id, $markAsRead);
+
+	/**
+	 * Delete message
+	 */
+	public function deleteMessage($id);
+
 }
