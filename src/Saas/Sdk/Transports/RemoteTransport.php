@@ -306,13 +306,13 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 		try {
 			$response = $this->client->get('/api/userstats/message/'.$userId, $this->defaultHeaders)->send();
 			$statsData = $response->getBody();
-			return new ResourceCollection(json_decode($statsData,true));
+			return new ResourceObject(json_decode($statsData,true));
 		} catch (Exception $e) {
 			if ($this->isNotAllowed($e)) {
 				throw new Exception(self::API_LIMIT_EXCEEDS);
 			}
 
-			return new ResourceCollection();
+			return new ResourceObject();
 		}
 	}
 
