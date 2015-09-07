@@ -36,4 +36,16 @@ class ResourceCollection implements IteratorAggregate
 	{
 		return new ArrayIterator($this->collection);
 	}
+
+	/**
+	 * Return array representation
+	 *
+	 * @return array
+	 */
+	public function toArray()
+	{
+		return array_map(function($item){
+			return $item->toArray();
+		}, $this->collection);
+	}
 }

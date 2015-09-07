@@ -288,6 +288,14 @@ class LocalTransport extends AbstractTransport implements TransportInterface
 	}
 
 	/**
+	 * @{inheritDoc}
+	 */
+	public function performBatchMessages($operation, $ids)
+	{
+		throw new Exception('Not implemented');
+	}
+
+	/**
 	 * Get DB Gateway
 	 *
 	 * @return Laravel DB

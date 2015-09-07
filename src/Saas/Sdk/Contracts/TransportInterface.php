@@ -155,4 +155,12 @@ interface TransportInterface
 	 */
 	public function deleteMessage($id);
 
+	/**
+	 * Perform message batch operation
+	 *
+	 * @param string operation
+	 * @param array  Message ids
+	 */
+	public function performBatchMessages($operation, $ids);
+
 }

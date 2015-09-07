@@ -81,4 +81,14 @@ class ResourceObject implements ArrayAccess
 	{
 		$this->data[$name] = $value;
 	}
+
+	/**
+	 * Return array representation
+	 *
+	 * @return array
+	 */
+	public function toArray()
+	{
+		return $this->data;
+	}
 }

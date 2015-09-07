@@ -21,6 +21,9 @@ interface ApiInterface
 	const SAAS_API_ACTIVE_USER = 'active_user';
 	const SAAS_API_ACTIVE_COMPANY = 'active_company';
 	const SAAS_API_ACTIVE_SUBSCRIPTION = 'active_subscription';
+	const SAAS_API_USER_INBOX = 'message_inbox';
+	const SAAS_API_USER_OUTBOX = 'message_outbox';
+	const SAAS_API_USER_STATS = 'message_stats';
 
 	/**
 	 * Get the original app url
@@ -223,6 +226,14 @@ interface ApiInterface
 	 * @return bool
 	 */
 	public function deleteMessage($id);
+
+	/**
+	 * Perform message batch operation
+	 *
+	 * @param string operation
+	 * @param array  Message ids
+	 */
+	public function batchMessages($operation, $ids);
 
 	/**
 	 * Get available plans

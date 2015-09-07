@@ -413,6 +413,24 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 	}
 
 	/**
+	 * @{inheritDoc}
+	 */
+	public function performBatchMessages($operation, $ids)
+	{
+		try {
+			$response = $this->client->get('/api/messages/'.$operation.'?'.http_build_query(compact('ids')), $this->defaultHeaders)->send();
+			$ids = $response->getBody();
+			return new ResourceObject(json_decode($ids,true));
+		} catch (Exception $e) {
+			if ($this->isNotAllowed($e)) {
+				throw new Exception(self::API_LIMIT_EXCEEDS);
+			}
+
+			return new ResourceObject();
+		}
+	}
+
+	/**
 	 * Get the base Saas API url
 	 *
 	 * @param mixed

@@ -46,7 +46,7 @@ final class Api implements ApiInterface
 	 *
 	 * @var array
 	 */
-	private $repos;
+	private $repos = array();
 
 	/**
 	 * Main API factory
@@ -337,7 +337,24 @@ final class Api implements ApiInterface
 	 */
 	public function getUserInbox($userId, $perPage = 10, $page = 1)
 	{
-		return $this->transport->getInboxByUser($userId, $perPage, $page);
+		if (isset($this->repos[self::SAAS_API_USER_INBOX])
+			&& isset($this->repos[self::SAAS_API_USER_INBOX][$userId]) 
+			&& isset($this->repos[self::SAAS_API_USER_INBOX][$userId][$page]) 
+			&& isset($this->repos[self::SAAS_API_USER_INBOX][$userId][$page][$perPage])) {
+			return $this->repos[self::SAAS_API_USER_INBOX][$userId][$page][$perPage];
+		}
+
+		$inbox = $this->transport->getInboxByUser($userId, $perPage, $page);
+
+		if (!isset($this->repos[self::SAAS_API_USER_INBOX][$userId])) {
+			$this->repos[self::SAAS_API_USER_INBOX][$userId] = array();
+		}
+		if (!isset($this->repos[self::SAAS_API_USER_INBOX][$userId][$page])) {
+			$this->repos[self::SAAS_API_USER_INBOX][$userId][$page] = array();
+		}
+		$this->repos[self::SAAS_API_USER_INBOX][$userId][$page][$perPage] = $inbox;
+
+		return $inbox;
 	}
 
 	/**
@@ -345,7 +362,24 @@ final class Api implements ApiInterface
 	 */
 	public function getUserOutbox($userId, $perPage = 10, $page = 1)
 	{
-		return $this->transport->getOutboxByUser($userId, $perPage, $page);
+		if (isset($this->repos[self::SAAS_API_USER_OUTBOX])
+			&& isset($this->repos[self::SAAS_API_USER_OUTBOX][$userId]) 
+			&& isset($this->repos[self::SAAS_API_USER_OUTBOX][$userId][$page]) 
+			&& isset($this->repos[self::SAAS_API_USER_OUTBOX][$userId][$page][$perPage])) {
+			return $this->repos[self::SAAS_API_USER_OUTBOX][$userId][$page][$perPage];
+		}
+
+		$outbox = $this->transport->getOutboxByUser($userId, $perPage, $page);
+
+		if (!isset($this->repos[self::SAAS_API_USER_OUTBOX][$userId])) {
+			$this->repos[self::SAAS_API_USER_OUTBOX][$userId] = array();
+		}
+		if (!isset($this->repos[self::SAAS_API_USER_OUTBOX][$userId][$page])) {
+			$this->repos[self::SAAS_API_USER_OUTBOX][$userId][$page] = array();
+		}
+		$this->repos[self::SAAS_API_USER_OUTBOX][$userId][$page][$perPage] = $outbox;
+
+		return $outbox;
 	}
 
 	/**
@@ -365,11 +399,19 @@ final class Api implements ApiInterface
 	}
 
 	/**
-	 * @{inheritMessage}
+	 * @{inheritDoc}
 	 */
 	public function deleteMessage($id)
 	{
 		return $this->transport->deleteMessage($id);
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function batchMessages($operation, $ids)
+	{
+		return $this->transport->performBatchMessages($operation, $ids);
 	}
 
 	/**
