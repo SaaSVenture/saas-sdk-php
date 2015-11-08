@@ -1,5 +1,7 @@
 <?php namespace Saas\Sdk\Contracts;
 
+use Saas\Sdk\ResourceObject;
+
 /**
  * API Interface
  *
@@ -121,6 +123,22 @@ interface ApiInterface
 	 * @return Saas\Sdk\ResourceObject
 	 */
 	public function setActiveCompany($id);
+
+	/**
+	 * Update active company
+	 *
+	 * @param Saas\Sdk\ResourceObject
+	 * @return Saas\Sdk\ResourceObject
+	 */
+	public function updateActiveCompany(ResourceObject $payload);
+	
+	/**
+	 * Get company users based by group name 
+	 * 
+	 * @param string
+	 * @return Saas\Sdk\ResourceCollection
+	 */
+	public function getActiveCompanyUsers($groupName);
 
 	/**
 	 * Get current active user's companies

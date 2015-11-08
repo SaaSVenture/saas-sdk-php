@@ -1,5 +1,7 @@
 <?php namespace Saas\Sdk\Contracts;
 
+use Saas\Sdk\ResourceObject;
+
 /**
  * Transport Layer Interface
  *
@@ -61,6 +63,26 @@ interface TransportInterface
 	 * @return Saas\Sdk\ResourceObject
 	 */
 	public function getCompany($id);
+
+
+	/**
+	 * Update company resource
+	 *
+	 * @param int
+	 * @param Saas\Sdk\ResourceObject
+	 * @return Saas\Sdk\ResourceObject
+	 */
+	public function updateCompany($id, ResourceObject $company);
+
+	/**
+	 * Get company team
+	 *
+	 * @param int
+	 * @param string
+	 * @return Saas\Sdk\ResourceCollection
+	 */
+	public function getCompanyTeam($id, $groupName);
+
 
 	/**
 	 * Switch user company

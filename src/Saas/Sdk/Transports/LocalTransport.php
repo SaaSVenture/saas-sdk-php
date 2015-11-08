@@ -158,6 +158,22 @@ class LocalTransport extends AbstractTransport implements TransportInterface
 	/**
 	 * @{inheritDoc}
 	 */
+	public function updateCompany($id, ResourceObject $company)
+	{
+		throw new Exception('Not implemented');
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function getCompanyTeam($id, $groupName)
+	{
+		throw new Exception('Not implemented');
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
 	public function switchCompany($userId, $brandId)
 	{
 		throw new Exception('Not implemented');

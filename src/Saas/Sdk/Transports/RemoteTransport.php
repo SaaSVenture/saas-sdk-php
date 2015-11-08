@@ -152,6 +152,46 @@ class RemoteTransport extends AbstractTransport implements TransportInterface
 		}
 	}
 
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function updateCompany($id, ResourceObject $company)
+	{
+		try {
+			$response = $this->client->post('/api/company/'.$id, $this->defaultHeaders, $company->toArray())->send();
+			$brandData = $response->getBody();
+			return new ResourceObject(json_decode($brandData,true));
+		} catch (Exception $e) {
+			if ($this->isNotAllowed($e)) {
+				throw new Exception(self::API_LIMIT_EXCEEDS);
+			}
+
+			return new ResourceObject();
+		}
+	}
+
+	/**
+	 * @{inheritDoc}
+	 */
+	public function getCompanyTeam($id, $groupName)
+	{
+		try {
+			$response = $this->client->get('/api/company/'.$id.'/team?'.http_build_query(array(
+				'group' => $groupName,
+			)), $this->defaultHeaders)->send();
+			$users = $response->getBody();
+			return new ResourceCollection(json_decode($users,true));
+		} catch (Exception $e) {
+			if ($this->isNotAllowed($e)) {
+				throw new Exception(self::API_LIMIT_EXCEEDS);
+			}
+			
+			return new ResourceCollection();
+		}
+	}
+
+
 	/**
 	 * @{inheritDoc}
 	 */
