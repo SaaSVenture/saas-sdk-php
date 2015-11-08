@@ -249,6 +249,7 @@ final class Api implements ApiInterface
 		}
 
 		$this->repos[self::SAAS_API_ACTIVE_COMPANY] = $activeCompany;
+		$this->session->set(self::SAAS_API_COMPANY, $activeCompany->id);
 
 		return $activeCompany;
 	}
